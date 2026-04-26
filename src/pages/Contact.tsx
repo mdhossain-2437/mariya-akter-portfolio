@@ -17,7 +17,7 @@ const SCOPES = [
   { id: "explore", label: "Still exploring", range: "Open", duration: "Discovery call" },
 ];
 
-const TIMELINES = ["This month", "Next quarter", "H2 2025", "No fixed date"];
+const TIMELINES = ["This month", "Next quarter", "H2 2026", "No fixed date"];
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -32,6 +32,7 @@ export default function Contact() {
   const [company, setCompany] = useState("");
   const [narrative, setNarrative] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const summary = useMemo(() => {
     return {
@@ -47,6 +48,34 @@ export default function Contact() {
   const back = () => setStep((s) => (s > 1 ? ((s - 1) as Step) : s));
 
   const submit = () => {
+    if (!name.trim()) {
+      setError("Please tell us your name.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    setError(null);
+    const lines = [
+      `Nature: ${summary.nature}`,
+      `Scope: ${summary.scope}`,
+      `Timeline: ${timeline}`,
+      `Budget: ${budget || "Open"}`,
+      `Company: ${company || "\u2014"}`,
+      "",
+      narrative || "(no narrative)",
+      "",
+      `\u2014 ${name} <${email}>`,
+    ];
+    const subject = `New inquiry \u2014 ${summary.nature}`;
+    const body = lines.join("\n");
+    const href = `mailto:hello@mariyaakter.me?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    try {
+      window.location.href = href;
+    } catch {
+      // ignore
+    }
     setSent(true);
   };
 
@@ -267,25 +296,32 @@ export default function Contact() {
               </div>
 
               {!sent && (
-                <div className="mt-10 flex items-center justify-between">
-                  <button
-                    type="button"
-                    disabled={step === 1}
-                    onClick={back}
-                    className="text-sm text-fg-muted disabled:opacity-30 hover:text-accent"
-                  >
-                    ← Back
-                  </button>
-                  {step < 4 ? (
-                    <button type="button" onClick={next} className="btn-primary">
-                      Continue <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  ) : (
-                    <button type="button" onClick={submit} className="btn-primary">
-                      Send inquiry <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                <>
+                  {error && step === 4 && (
+                    <p role="alert" className="mt-6 text-sm text-[var(--accent)]">
+                      {error}
+                    </p>
                   )}
-                </div>
+                  <div className="mt-8 flex items-center justify-between">
+                    <button
+                      type="button"
+                      disabled={step === 1}
+                      onClick={back}
+                      className="text-sm text-fg-muted disabled:opacity-30 hover:text-accent"
+                    >
+                      ← Back
+                    </button>
+                    {step < 4 ? (
+                      <button type="button" onClick={next} className="btn-primary">
+                        Continue <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    ) : (
+                      <button type="button" onClick={submit} className="btn-primary">
+                        Send inquiry <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>
