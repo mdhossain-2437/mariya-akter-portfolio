@@ -12,6 +12,7 @@ import { clients, testimonials } from "../data/clients";
 import { awards } from "../data/awards";
 import { journalPosts } from "../data/journal";
 import { principles } from "../data/process";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 
 const TAGS = ["Graphics Design", "Digital Marketing", "Fashion Designer", "Creative Direction"];
 
@@ -118,7 +119,9 @@ function HeroParallax() {
             <Tilt intensity={5} className="relative">
               <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:ml-auto rounded-sm overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)]">
                 <img
-                  src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80"
+                  src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75"
+                  srcSet="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=75 400w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75 600w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80 900w"
+                  sizes="(max-width: 768px) 80vw, 30vw"
                   alt="Mariya Akter, portrait"
                   width="900"
                   height="1125"
@@ -201,7 +204,9 @@ function FeaturedWork() {
             <Link to={`/work/${p.slug}`} className="group block">
               <div className="overflow-hidden bg-ink-900 aspect-[5/6]">
                 <img
-                  src={p.cover}
+                  src={unsplashSized(p.cover, 800)}
+                  srcSet={unsplashSrcSet(p.cover, [400, 600, 800, 1200])}
+                  sizes="(max-width: 768px) 90vw, 45vw"
                   alt={p.title}
                   loading="lazy"
                   decoding="async"
@@ -381,7 +386,9 @@ function JournalTeasers() {
             <Link to="/journal" className="group block">
               <div className="aspect-[4/5] overflow-hidden bg-ink-900">
                 <img
-                  src={p.cover}
+                  src={unsplashSized(p.cover, 600)}
+                  srcSet={unsplashSrcSet(p.cover, [300, 500, 800])}
+                  sizes="(max-width: 768px) 90vw, 30vw"
                   alt={p.title}
                   loading="lazy"
                   decoding="async"
