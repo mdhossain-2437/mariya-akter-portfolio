@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import Cursor from "./components/Cursor";
 import SmoothScroll from "./components/SmoothScroll";
 import ScrollProgress from "./components/ScrollProgress";
-import LoadingScreen from "./components/LoadingScreen";
 import PageTransition from "./components/PageTransition";
 import CommandPalette from "./components/CommandPalette";
 import AudioToggle from "./components/AudioToggle";
@@ -62,7 +61,6 @@ function AppRoutes() {
       <SmoothScroll />
       <ScrollProgress />
       <Cursor />
-      <LoadingScreen />
       <CommandPalette onToggleTheme={toggle} />
       <ThemeRipple />
       <Header />
