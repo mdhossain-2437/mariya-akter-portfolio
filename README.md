@@ -7,7 +7,6 @@ Fashion direction · Brand identity · Digital craft.
 
 [**mariyaakter.me**](https://mariyaakter.me) · [Live preview](https://dist-unddrkyd.devinapps.com)
 
-![CI](https://github.com/mdhossain-2437/mariya-akter-portfolio/actions/workflows/ci.yml/badge.svg)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
