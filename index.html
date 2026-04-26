@@ -4,7 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FBF7F1" />
+    <meta name="theme-color" content="#0B0A09" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FBF7F1" media="(prefers-color-scheme: light)" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var theme = stored === "light" || stored === "dark" ? stored : "dark";
+          if (theme === "dark") document.documentElement.classList.add("dark");
+          document.documentElement.style.backgroundColor = theme === "dark" ? "#0B0A09" : "#FBF7F1";
+        } catch (_) {
+          document.documentElement.classList.add("dark");
+          document.documentElement.style.backgroundColor = "#0B0A09";
+        }
+      })();
+    </script>
     <meta name="description" content="Mariya Akter — Multidisciplinary designer crafting intentional brand identities, fashion direction, and digital strategy." />
     <meta property="og:title" content="Mariya Akter — Portfolio" />
     <meta property="og:description" content="Bridging cultural heritage with contemporary digital design." />

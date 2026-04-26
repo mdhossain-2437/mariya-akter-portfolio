@@ -33,6 +33,7 @@ export default function Contact() {
   const [narrative, setNarrative] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   const summary = useMemo(() => {
     return {
@@ -47,16 +48,7 @@ export default function Contact() {
   const next = () => setStep((s) => (s < 4 ? ((s + 1) as Step) : s));
   const back = () => setStep((s) => (s > 1 ? ((s - 1) as Step) : s));
 
-  const submit = () => {
-    if (!name.trim()) {
-      setError("Please tell us your name.");
-      return;
-    }
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    setError(null);
+  const mailtoFallback = () => {
     const lines = [
       `Nature: ${summary.nature}`,
       `Scope: ${summary.scope}`,
@@ -76,7 +68,47 @@ export default function Contact() {
     } catch {
       // ignore
     }
-    setSent(true);
+  };
+
+  const submit = async () => {
+    if (!name.trim()) {
+      setError("Please tell us your name.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    setError(null);
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          company: company.trim(),
+          nature: summary.nature,
+          scope: summary.scope,
+          timeline,
+          budget: budget.trim(),
+          narrative: narrative.trim(),
+        }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      setSent(true);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Something went wrong sending your inquiry.";
+      setError(`${message} Opening your mail app as a fallback…`);
+      mailtoFallback();
+      setSent(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -316,8 +348,8 @@ export default function Contact() {
                         Continue <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     ) : (
-                      <button type="button" onClick={submit} className="btn-primary">
-                        Send inquiry <ArrowRight className="w-3.5 h-3.5" />
+                      <button type="button" onClick={submit} disabled={sending} className="btn-primary disabled:opacity-60">
+                        {sending ? "Sending…" : "Send inquiry"} <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
