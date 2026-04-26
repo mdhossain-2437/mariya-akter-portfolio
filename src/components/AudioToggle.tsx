@@ -76,6 +76,7 @@ export default function AudioToggle() {
     <button
       type="button"
       aria-pressed={on}
+      aria-label={on ? "Sound on — mute ambient audio" : "Sound off — play ambient audio"}
       title={on ? "Mute ambient audio" : "Play ambient audio"}
       onClick={toggle}
       className="fixed bottom-5 right-5 z-30 flex h-10 items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--bg-elev)] px-3 text-[10px] uppercase tracking-[0.18em] text-[var(--fg-muted)] backdrop-blur transition-colors hover:text-[var(--accent)]"
