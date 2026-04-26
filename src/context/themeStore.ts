@@ -11,12 +11,12 @@ export type ThemeCtxValue = {
 export const ThemeContext = createContext<ThemeCtxValue | null>(null);
 
 export function readInitialTheme(): Theme {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   try {
     const stored = localStorage.getItem("theme") as Theme | null;
     if (stored === "light" || stored === "dark") return stored;
   } catch {
     // ignore
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "dark";
 }
