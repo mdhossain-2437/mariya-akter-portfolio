@@ -1,7 +1,18 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Cursor from "./components/Cursor";
+import SmoothScroll from "./components/SmoothScroll";
+import ScrollProgress from "./components/ScrollProgress";
+import LoadingScreen from "./components/LoadingScreen";
+import PageTransition from "./components/PageTransition";
+import CommandPalette from "./components/CommandPalette";
+import { ThemeProvider } from "./context/ThemeContext";
+import { useTheme } from "./context/useTheme";
+
 import Home from "./pages/Home";
 import Work from "./pages/Work";
 import Archive from "./pages/Archive";
@@ -13,6 +24,14 @@ import Journal from "./pages/Journal";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
+import Lookbook from "./pages/Lookbook";
+import Process from "./pages/Process";
+import Press from "./pages/Press";
+import Clients from "./pages/Clients";
+import Now from "./pages/Now";
+import FAQ from "./pages/FAQ";
+import Pricing from "./pages/Pricing";
+import Terms from "./pages/Terms";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -22,27 +41,54 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+function AppRoutes() {
+  const location = useLocation();
+  const { toggle } = useTheme();
   return (
     <>
       <ScrollToTop />
+      <SmoothScroll />
+      <ScrollProgress />
+      <Cursor />
+      <LoadingScreen />
+      <CommandPalette onToggleTheme={toggle} />
       <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/work/:slug" element={<CaseStudy />} />
-          <Route path="/archive" element={<Archive />} />
-          <Route path="/expertise" element={<Expertise />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+      <main className="relative">
+        <AnimatePresence mode="wait" initial={false}>
+          <PageTransition key={location.pathname}>
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/work/:slug" element={<CaseStudy />} />
+              <Route path="/lookbook" element={<Lookbook />} />
+              <Route path="/archive" element={<Archive />} />
+              <Route path="/expertise" element={<Expertise />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/process" element={<Process />} />
+              <Route path="/press" element={<Press />} />
+              <Route path="/clients" element={<Clients />} />
+              <Route path="/now" element={<Now />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/journal" element={<Journal />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </PageTransition>
+        </AnimatePresence>
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppRoutes />
+    </ThemeProvider>
   );
 }

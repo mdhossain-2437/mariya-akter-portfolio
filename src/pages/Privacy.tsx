@@ -61,11 +61,11 @@ export default function Privacy() {
     <div className="pt-16 md:pt-20">
       <section className="container-narrow pt-12 md:pt-20 pb-12">
         <p className="label">Commitment to Integrity</p>
-        <h1 className="mt-4 font-serif text-ink-900 text-[clamp(3rem,9vw,7rem)] leading-[1]">
+        <h1 className="mt-4 font-serif text-fg text-[clamp(3rem,9vw,7rem)] leading-[1]">
           Privacy
           <br />& Terms.
         </h1>
-        <p className="mt-6 italic text-ink-500 text-sm">Last updated: May 24, 2024</p>
+        <p className="mt-6 italic text-fg-muted text-sm">Last updated: May 24, 2024</p>
       </section>
 
       <section className="container-narrow pb-24 grid md:grid-cols-12 gap-10">
@@ -79,7 +79,7 @@ export default function Privacy() {
                   className={`text-sm transition-colors ${
                     i === 0
                       ? "text-accent font-semibold"
-                      : "text-ink-700 hover:text-accent"
+                      : "text-fg-muted hover:text-accent"
                   }`}
                 >
                   {s.n}. {s.title}
@@ -93,32 +93,32 @@ export default function Privacy() {
           {SECTIONS.map((s) => (
             <section id={s.id} key={s.id} className="scroll-mt-28">
               <h2 className="flex items-baseline gap-4">
-                <span className="font-serif italic text-ink-300 text-lg">{s.n}</span>
-                <span className="font-serif text-2xl md:text-3xl text-ink-900">{s.title}</span>
+                <span className="font-serif italic text-fg-muted text-lg">{s.n}</span>
+                <span className="font-serif text-2xl md:text-3xl text-fg">{s.title}</span>
               </h2>
-              <div className="mt-5 space-y-4 text-ink-700 leading-relaxed">
+              <div className="mt-5 space-y-4 text-fg-muted leading-relaxed">
                 {s.body.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
               </div>
 
               {s.columns && (
-                <div className="mt-6 bg-cream-200 rounded-sm p-6 md:p-8 grid md:grid-cols-2 gap-8">
+                <div className="mt-6 bg-app-elev rounded-sm p-6 md:p-8 grid md:grid-cols-2 gap-8">
                   {s.columns.map((c) => (
                     <div key={c.title}>
                       <p className="label-muted">{c.title}</p>
-                      <p className="mt-2 text-sm text-ink-700 leading-relaxed">{c.body}</p>
+                      <p className="mt-2 text-sm text-fg-muted leading-relaxed">{c.body}</p>
                     </div>
                   ))}
                 </div>
               )}
 
               {s.quote && (
-                <blockquote className="mt-6 border-l-2 border-accent pl-6 italic text-ink-800">
+                <blockquote className="mt-6 border-l-2 border-accent pl-6 italic text-fg">
                   {s.quote}
                 </blockquote>
               )}
-              {s.extra && <p className="mt-4 text-ink-700 leading-relaxed">{s.extra}</p>}
+              {s.extra && <p className="mt-4 text-fg-muted leading-relaxed">{s.extra}</p>}
             </section>
           ))}
         </div>

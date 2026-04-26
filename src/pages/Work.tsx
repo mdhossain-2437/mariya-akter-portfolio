@@ -18,13 +18,13 @@ export default function Work() {
       <section className="container-narrow pt-12 md:pt-20 pb-20 md:pb-28">
         <div className="grid lg:grid-cols-12 gap-10 items-end mb-20 md:mb-28">
           <div className="lg:col-span-8 fade-up">
-            <h1 className="font-serif text-ink-900 leading-[1] text-[clamp(2.6rem,7.5vw,5.6rem)]">
+            <h1 className="font-serif text-fg leading-[1] text-[clamp(2.6rem,7.5vw,5.6rem)]">
               Curating <em className="text-accent">visual narratives</em>
               <br /> across fashion and digital realms.
             </h1>
           </div>
           <div className="lg:col-span-4 fade-up-delay-1">
-            <p className="text-ink-700 leading-relaxed">
+            <p className="text-fg-muted leading-relaxed">
               A multidisciplinary portfolio exploring the intersection of tactile
               fashion aesthetics and high-performance product design.
             </p>
@@ -50,7 +50,7 @@ export default function Work() {
                   />
                 </div>
                 <div className="mt-5 flex items-baseline justify-between gap-4">
-                  <h3 className="font-serif italic text-xl md:text-2xl text-ink-900">
+                  <h3 className="font-serif italic text-xl md:text-2xl text-fg">
                     {p.title}
                   </h3>
                   <p className="label-muted whitespace-nowrap">
@@ -81,7 +81,7 @@ export default function Work() {
             </div>
           </Link>
           <div className="mt-8 md:mt-10 grid md:grid-cols-12 gap-6 items-end">
-            <p className="md:col-span-7 text-ink-700 leading-relaxed">
+            <p className="md:col-span-7 text-fg-muted leading-relaxed">
               {featured.blurb}
             </p>
             <div className="md:col-span-5 md:text-right">
@@ -93,10 +93,10 @@ export default function Work() {
         </div>
       </section>
 
-      <section className="bg-cream-200 py-24 md:py-32">
+      <section className="bg-app-elev py-24 md:py-32">
         <div className="container-narrow text-center">
           <p className="label-muted">Next Chapter</p>
-          <h2 className="font-serif italic text-5xl md:text-7xl mt-4 text-ink-900">
+          <h2 className="font-serif italic text-5xl md:text-7xl mt-4 text-fg">
             About Me
           </h2>
           <Link
