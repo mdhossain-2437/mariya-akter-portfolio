@@ -97,7 +97,7 @@ export default function Contact() {
           </div>
           <div className="md:col-span-4">
             <p className="text-fg-muted">
-              We respond within 48 hours, Monday through Thursday. Currently scheduling for Q3 2025.
+              We respond within 48 hours, Monday through Thursday. Currently scheduling for Q3 2026.
             </p>
           </div>
         </div>
