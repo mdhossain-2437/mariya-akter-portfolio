@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 const SERVICES = [
   {
@@ -87,6 +88,7 @@ const TIERS = [
 export default function Services() {
   return (
     <div className="pt-16 md:pt-20">
+      <Seo title="Services" path="/services" description="Brand identity, fashion direction, digital flagship, editorial design, and creative direction — what the studio does and how it ships." />
       <section className="container-narrow pt-12 md:pt-20 pb-20">
         <p className="label">Services & Pricing</p>
         <h1 className="mt-6 font-serif text-fg leading-[1.02] text-[clamp(2.6rem,7vw,5.5rem)]">

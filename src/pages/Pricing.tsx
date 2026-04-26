@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal";
 import Magnetic from "../components/Magnetic";
+import Seo from "../components/Seo";
 import { services, addOns } from "../data/services";
 
 const TIERS = [
@@ -31,6 +32,7 @@ const TIERS = [
 export default function Pricing() {
   return (
     <div className="pt-24 md:pt-32">
+      <Seo title="Pricing & Engagement" path="/pricing" description="Three engagement tiers — Identity from $8.5k, Studio from $5.5k/month, Flagship from $25k. Honest scope, clear deliverables." />
       <section className="container-wide">
         <Reveal><p className="label">Engagement · 2024–2025</p></Reveal>
         <Reveal delay={0.1}>

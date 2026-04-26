@@ -76,10 +76,12 @@ export default function Footer() {
             <li><Link className="link-reveal" to="/lookbook">Lookbook</Link></li>
             <li><Link className="link-reveal" to="/services">Services</Link></li>
             <li><Link className="link-reveal" to="/process">Process</Link></li>
+            <li><Link className="link-reveal" to="/capabilities">Capabilities</Link></li>
             <li><Link className="link-reveal" to="/about">Studio</Link></li>
             <li><Link className="link-reveal" to="/journal">Journal</Link></li>
             <li><Link className="link-reveal" to="/clients">Clients</Link></li>
             <li><Link className="link-reveal" to="/press">Press</Link></li>
+            <li><Link className="link-reveal" to="/pricing">Pricing</Link></li>
             <li><Link className="link-reveal" to="/now">Now</Link></li>
             <li><Link className="link-reveal" to="/faq">FAQ</Link></li>
           </ul>

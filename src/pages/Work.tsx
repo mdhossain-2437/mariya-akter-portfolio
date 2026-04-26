@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 import { projects } from "../data/projects";
 
 const GRID = [
@@ -15,6 +16,7 @@ export default function Work() {
 
   return (
     <div className="pt-16 md:pt-20">
+      <Seo title="Selected Work" path="/work" description="Selected case studies — brand identity, fashion direction, digital flagship, and editorial design across global houses." />
       <section className="container-narrow pt-12 md:pt-20 pb-20 md:pb-28">
         <div className="grid lg:grid-cols-12 gap-10 items-end mb-20 md:mb-28">
           <div className="lg:col-span-8 fade-up">

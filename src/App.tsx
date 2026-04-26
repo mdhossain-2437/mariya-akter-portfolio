@@ -10,6 +10,10 @@ import ScrollProgress from "./components/ScrollProgress";
 import LoadingScreen from "./components/LoadingScreen";
 import PageTransition from "./components/PageTransition";
 import CommandPalette from "./components/CommandPalette";
+import AudioToggle from "./components/AudioToggle";
+import ThemeRipple from "./components/ThemeRipple";
+import SkipLink from "./components/SkipLink";
+import Seo from "./components/Seo";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useTheme } from "./context/useTheme";
 
@@ -21,6 +25,7 @@ import Expertise from "./pages/Expertise";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Journal from "./pages/Journal";
+import JournalEntry from "./pages/JournalEntry";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
@@ -32,6 +37,7 @@ import Now from "./pages/Now";
 import FAQ from "./pages/FAQ";
 import Pricing from "./pages/Pricing";
 import Terms from "./pages/Terms";
+import Capabilities from "./pages/Capabilities";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,14 +52,17 @@ function AppRoutes() {
   const { toggle } = useTheme();
   return (
     <>
+      <Seo />
+      <SkipLink />
       <ScrollToTop />
       <SmoothScroll />
       <ScrollProgress />
       <Cursor />
       <LoadingScreen />
       <CommandPalette onToggleTheme={toggle} />
+      <ThemeRipple />
       <Header />
-      <main className="relative">
+      <main id="main" className="relative">
         <AnimatePresence mode="wait" initial={false}>
           <PageTransition key={location.pathname}>
             <Routes location={location}>
@@ -65,6 +74,7 @@ function AppRoutes() {
               <Route path="/expertise" element={<Expertise />} />
               <Route path="/services" element={<Services />} />
               <Route path="/process" element={<Process />} />
+              <Route path="/capabilities" element={<Capabilities />} />
               <Route path="/press" element={<Press />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/now" element={<Now />} />
@@ -72,6 +82,7 @@ function AppRoutes() {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/about" element={<About />} />
               <Route path="/journal" element={<Journal />} />
+              <Route path="/journal/:slug" element={<JournalEntry />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
@@ -81,6 +92,7 @@ function AppRoutes() {
         </AnimatePresence>
       </main>
       <Footer />
+      <AudioToggle />
     </>
   );
 }

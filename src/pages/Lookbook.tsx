@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Reveal from "../components/Reveal";
+import Seo from "../components/Seo";
 import { lookbookSections, galleryStrip } from "../data/lookbook";
 
 function DragRow({ images }: { images: string[] }) {
@@ -59,6 +60,7 @@ export default function Lookbook() {
 
   return (
     <div className="pt-24 md:pt-32">
+      <Seo title="Lookbook" path="/lookbook" description="Three chapters of capsule storytelling — Velvet Silence SS24, Aura Digital, and The Weaver's Paradox AW24. Drag, scroll, and look closer." />
       <section className="container-wide">
         <Reveal>
           <p className="label">Lookbook · 2024</p>

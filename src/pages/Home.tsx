@@ -6,6 +6,7 @@ import Marquee from "../components/Marquee";
 import Magnetic from "../components/Magnetic";
 import Reveal from "../components/Reveal";
 import Tilt from "../components/Tilt";
+import Seo from "../components/Seo";
 import { projects } from "../data/projects";
 import { clients, testimonials } from "../data/clients";
 import { awards } from "../data/awards";
@@ -392,6 +393,7 @@ function JournalTeasers() {
 export default function Home() {
   return (
     <div>
+      <Seo title="Mariya Akter — Portfolio" path="/" description="Multidisciplinary designer crafting intentional brand identities, fashion direction, and digital strategy. Studio in Dhaka, clients worldwide." />
       <HeroParallax />
       <ClientsMarquee />
       <StatsRow />
