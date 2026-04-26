@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mariyaakter.me/</loc><priority>1.0</priority></url>
-  <url><loc>https://mariyaakter.me/work</loc><priority>0.9</priority></url>
-  <url><loc>https://mariyaakter.me/lookbook</loc><priority>0.9</priority></url>
-  <url><loc>https://mariyaakter.me/services</loc><priority>0.9</priority></url>
-  <url><loc>https://mariyaakter.me/process</loc><priority>0.8</priority></url>
-  <url><loc>https://mariyaakter.me/capabilities</loc><priority>0.8</priority></url>
-  <url><loc>https://mariyaakter.me/about</loc><priority>0.8</priority></url>
-  <url><loc>https://mariyaakter.me/clients</loc><priority>0.7</priority></url>
-  <url><loc>https://mariyaakter.me/press</loc><priority>0.7</priority></url>
-  <url><loc>https://mariyaakter.me/journal</loc><priority>0.7</priority></url>
-  <url><loc>https://mariyaakter.me/now</loc><priority>0.6</priority></url>
-  <url><loc>https://mariyaakter.me/faq</loc><priority>0.6</priority></url>
-  <url><loc>https://mariyaakter.me/pricing</loc><priority>0.7</priority></url>
-  <url><loc>https://mariyaakter.me/contact</loc><priority>0.9</priority></url>
-  <url><loc>https://mariyaakter.me/archive</loc><priority>0.5</priority></url>
-  <url><loc>https://mariyaakter.me/expertise</loc><priority>0.5</priority></url>
-  <url><loc>https://mariyaakter.me/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://mariyaakter.me/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://mariyaakter.me/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mariyaakter.me/work</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mariyaakter.me/projects</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mariyaakter.me/lookbook</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mariyaakter.me/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mariyaakter.me/contact</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mariyaakter.me/process</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/capabilities</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/clients</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/press</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/journal</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/pricing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/now</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mariyaakter.me/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mariyaakter.me/archive</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://mariyaakter.me/expertise</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://mariyaakter.me/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://mariyaakter.me/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+  <!-- Case studies -->
+  <url><loc>https://mariyaakter.me/work/aura-digital</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/work/velvet-silence</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/work/neon-renaissance</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/work/kinetics-sports-lab</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mariyaakter.me/work/the-weavers-paradox</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/aura-chronos</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/metamorphosis</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/vogue-atelier</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/future-of-retail</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/silk-structure</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/the-brutalist-cut</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/paper-trails</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/liquid-marketing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/modern-museum</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mariyaakter.me/work/couture-cipher</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Journal entries -->
+  <url><loc>https://mariyaakter.me/journal/architecture-of-silence</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mariyaakter.me/journal/typography-sole-narrator</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mariyaakter.me/journal/data-driven-elegance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mariyaakter.me/journal/post-digital-aesthetic</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

@@ -1,3 +1,5 @@
+import Seo from "../components/Seo";
+
 const SECTIONS = [
   {
     id: "introduction",
@@ -59,6 +61,11 @@ const SECTIONS = [
 export default function Privacy() {
   return (
     <div className="pt-16 md:pt-20">
+      <Seo
+        title="Privacy"
+        path="/privacy"
+        description="How the studio collects, uses, and protects personal data. Radical transparency — the same intentionality we bring to our creative work."
+      />
       <section className="container-narrow pt-12 md:pt-20 pb-12">
         <p className="label">Commitment to Integrity</p>
         <h1 className="mt-4 font-serif text-fg text-[clamp(3rem,9vw,7rem)] leading-[1]">

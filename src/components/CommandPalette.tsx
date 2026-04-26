@@ -36,6 +36,7 @@ export default function CommandPalette({ onToggleTheme }: { onToggleTheme: () =>
     () => [
       { id: "home", group: "Navigate", label: "Home", to: "/" },
       { id: "work", group: "Navigate", label: "Work", to: "/work" },
+      { id: "projects", group: "Navigate", label: "All projects · studio book", to: "/projects" },
       { id: "lookbook", group: "Navigate", label: "Lookbook", to: "/lookbook" },
       { id: "services", group: "Navigate", label: "Services", to: "/services" },
       { id: "process", group: "Navigate", label: "Process", to: "/process" },

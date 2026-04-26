@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { archiveProjects } from "../data/projects";
+import Seo from "../components/Seo";
 
 const CATEGORIES = ["All Work", "Fashion", "Digital", "Editorial"];
 const YEARS = ["2024", "2023", "2022", "Show All"];
@@ -18,6 +19,11 @@ export default function Archive() {
 
   return (
     <div className="pt-16 md:pt-20">
+      <Seo
+        title="Archive"
+        path="/archive"
+        description="A comprehensive archive of work spanning seven years of interdisciplinary practice — fashion, digital, and editorial design."
+      />
       <section className="container-narrow pt-12 md:pt-20 pb-24">
         <div className="grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-7 fade-up">
@@ -92,6 +98,10 @@ export default function Archive() {
                 <img
                   src={p.cover}
                   alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="1000"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
               </div>

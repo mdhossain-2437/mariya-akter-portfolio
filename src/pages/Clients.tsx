@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "../components/Reveal";
 import Marquee from "../components/Marquee";
+import Seo from "../components/Seo";
 import { clients, testimonials } from "../data/clients";
 
 export default function Clients() {
@@ -9,6 +10,11 @@ export default function Clients() {
   const t = testimonials[active];
   return (
     <div className="pt-24 md:pt-32">
+      <Seo
+        title="Clients"
+        path="/clients"
+        description="A short list of long partnerships — studios, houses, and teams the studio has directed alongside since 2018."
+      />
       <section className="container-wide">
         <Reveal><p className="label">Clients · since 2018</p></Reveal>
         <Reveal delay={0.1}>
@@ -81,7 +87,7 @@ export default function Clients() {
                   "{t.quote}"
                 </blockquote>
                 <div className="mt-10 flex items-center gap-4">
-                  <img src={t.image} alt="" className="w-14 h-14 rounded-full object-cover" />
+                  <img src={t.image} alt="" loading="lazy" decoding="async" width="56" height="56" className="w-14 h-14 rounded-full object-cover" />
                   <div>
                     <div className="font-serif italic text-xl">{t.name}</div>
                     <div className="label-muted">{t.role}</div>

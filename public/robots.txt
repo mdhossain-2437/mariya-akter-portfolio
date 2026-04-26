@@ -1,4 +1,19 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# AI crawlers — allow for discovery (portfolio is meant to be indexed)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
 
 Sitemap: https://mariyaakter.me/sitemap.xml
+Host: https://mariyaakter.me

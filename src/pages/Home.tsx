@@ -120,6 +120,10 @@ function HeroParallax() {
                 <img
                   src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80"
                   alt="Mariya Akter, portrait"
+                  width="900"
+                  height="1125"
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-full h-full object-cover grayscale-[10%]"
                 />
                 <div className="absolute -bottom-4 -left-4 hidden sm:block bg-app px-5 py-4 shadow-lg max-w-[15rem] border border-line">
@@ -199,6 +203,10 @@ function FeaturedWork() {
                 <img
                   src={p.cover}
                   alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="960"
                   className="w-full h-full object-cover transition-transform duration-1000 ease-smooth group-hover:scale-110"
                 />
               </div>
@@ -301,7 +309,7 @@ function TestimonialCarousel() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-10 flex items-center justify-center gap-4"
         >
-          <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover" />
+          <img src={t.image} alt={t.name} loading="lazy" decoding="async" width="48" height="48" className="w-12 h-12 rounded-full object-cover" />
           <div className="text-left">
             <div className="font-serif italic">{t.name}</div>
             <div className="label-muted">{t.role}</div>
@@ -375,6 +383,10 @@ function JournalTeasers() {
                 <img
                   src={p.cover}
                   alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="1000"
                   className="w-full h-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
                 />
               </div>

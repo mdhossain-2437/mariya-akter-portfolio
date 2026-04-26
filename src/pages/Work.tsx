@@ -35,7 +35,7 @@ export default function Work() {
         </div>
 
         <div className="grid md:grid-cols-12 gap-8 md:gap-x-10 md:gap-y-24">
-          {GRID.slice(0, 4).map((g) => {
+          {GRID.slice(0, 4).map((g, i) => {
             const p = lookup[g.slug];
             if (!p) return null;
             return (
@@ -48,6 +48,11 @@ export default function Work() {
                   <img
                     src={p.cover}
                     alt={p.title}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    fetchPriority={i === 0 ? "high" : "auto"}
+                    decoding="async"
+                    width="1200"
+                    height="1500"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
@@ -71,6 +76,10 @@ export default function Work() {
               <img
                 src={featured.cover}
                 alt={featured.title}
+                loading="lazy"
+                decoding="async"
+                width="1600"
+                height="900"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink-900/70 via-ink-900/10 to-transparent" />
@@ -91,6 +100,33 @@ export default function Work() {
                 View Case Study
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* See all projects CTA */}
+      <section className="container-narrow py-12 md:py-16 border-t border-line">
+        <div className="grid md:grid-cols-12 gap-8 items-end">
+          <div className="md:col-span-8">
+            <p className="label-muted">The rest of the catalogue</p>
+            <h2 className="mt-4 font-serif text-fg text-[clamp(1.8rem,4vw,3rem)] leading-[1.05]">
+              {projects.length} projects in the studio book —
+              <em className="italic text-accent"> from flagship identity systems to experimental editorial work.</em>
+            </h2>
+          </div>
+          <div className="md:col-span-4 md:text-right">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-3 px-7 py-4 rounded-full bg-fg text-bg font-medium hover:bg-accent hover:text-cream-100 transition-colors"
+            >
+              See all projects
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <p className="mt-4 text-xs uppercase tracking-[0.2em] text-fg-muted">
+              Grid · filter · chronology · NDA shelf
+            </p>
           </div>
         </div>
       </section>

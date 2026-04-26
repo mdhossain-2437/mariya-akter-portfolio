@@ -1,4 +1,5 @@
 import Reveal from "../components/Reveal";
+import Seo from "../components/Seo";
 
 const SECTIONS = [
   { id: "scope", title: "1. Scope of services", body: "All engagements are governed by a signed statement of work that defines deliverables, timeline, and fees. Anything outside that scope is a change order, agreed in writing before work begins." },
@@ -14,6 +15,11 @@ const SECTIONS = [
 export default function Terms() {
   return (
     <div className="pt-24 md:pt-32 pb-20">
+      <Seo
+        title="Terms"
+        path="/terms"
+        description="Engagement terms — scope, payments, IP, confidentiality, and the rest of the clauses that make a studio engagement feel clean."
+      />
       <div className="container-narrow grid lg:grid-cols-12 gap-10">
         <aside className="lg:col-span-3 lg:sticky lg:top-28 self-start">
           <p className="label">Terms · 2024</p>
