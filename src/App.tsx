@@ -1,18 +1,22 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Cursor from "./components/Cursor";
-import SmoothScroll from "./components/SmoothScroll";
-import ScrollProgress from "./components/ScrollProgress";
 import PageTransition from "./components/PageTransition";
-import CommandPalette from "./components/CommandPalette";
-import AudioToggle from "./components/AudioToggle";
-import ThemeRipple from "./components/ThemeRipple";
 import SkipLink from "./components/SkipLink";
 import Seo from "./components/Seo";
+
+// Non-critical UI — split out of the initial bundle so mobile LCP doesn't wait
+// for framer-motion/lenis/fuse to download + parse. They mount ~idle after
+// React's first commit.
+const Cursor = lazy(() => import("./components/Cursor"));
+const SmoothScroll = lazy(() => import("./components/SmoothScroll"));
+const ScrollProgress = lazy(() => import("./components/ScrollProgress"));
+const CommandPalette = lazy(() => import("./components/CommandPalette"));
+const AudioToggle = lazy(() => import("./components/AudioToggle"));
+const ThemeRipple = lazy(() => import("./components/ThemeRipple"));
 import { ThemeProvider } from "./context/ThemeContext";
 import { useTheme } from "./context/useTheme";
 
@@ -50,19 +54,31 @@ function ScrollToTop() {
   return null;
 }
 
+function useAfterPaint() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+    const id = ric
+      ? ric(() => setReady(true), { timeout: 2000 })
+      : window.setTimeout(() => setReady(true), 600);
+    return () => {
+      const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+      if (ric && cic) cic(id as number);
+      else window.clearTimeout(id as number);
+    };
+  }, []);
+  return ready;
+}
+
 function AppRoutes() {
   const location = useLocation();
   const { toggle } = useTheme();
+  const ambientReady = useAfterPaint();
   return (
     <>
       <Seo />
       <SkipLink />
       <ScrollToTop />
-      <SmoothScroll />
-      <ScrollProgress />
-      <Cursor />
-      <CommandPalette onToggleTheme={toggle} />
-      <ThemeRipple />
       <Header />
       <main id="main" className="relative">
         <AnimatePresence mode="wait" initial={false}>
@@ -97,7 +113,16 @@ function AppRoutes() {
         </AnimatePresence>
       </main>
       <Footer />
-      <AudioToggle />
+      {ambientReady && (
+        <Suspense fallback={null}>
+          <SmoothScroll />
+          <ScrollProgress />
+          <Cursor />
+          <CommandPalette onToggleTheme={toggle} />
+          <ThemeRipple />
+          <AudioToggle />
+        </Suspense>
+      )}
     </>
   );
 }

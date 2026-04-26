@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Fuse from "fuse.js";
+import type Fuse from "fuse.js";
 
 type Item = {
   id: string;
@@ -63,15 +63,24 @@ export default function CommandPalette({ onToggleTheme }: { onToggleTheme: () =>
     [onToggleTheme],
   );
 
-  const fuse = useMemo(
-    () =>
-      new Fuse(items, {
-        keys: ["label", "group"],
-        threshold: 0.4,
-        ignoreLocation: true,
-      }),
-    [items],
-  );
+  const [fuse, setFuse] = useState<Fuse<Item> | null>(null);
+  useEffect(() => {
+    // Lazy-load fuse.js only when the palette is opened — keeps it out of
+    // the initial JS bundle that blocks mobile LCP.
+    if (!open) return;
+    let cancelled = false;
+    import("fuse.js").then(({ default: FuseCtor }) => {
+      if (cancelled) return;
+      setFuse(
+        new FuseCtor(items, {
+          keys: ["label", "group"],
+          threshold: 0.4,
+          ignoreLocation: true,
+        }),
+      );
+    });
+    return () => { cancelled = true; };
+  }, [items, open]);
 
   const visible: Item[] = useMemo(() => {
     if (!q.trim()) {
@@ -83,6 +92,10 @@ export default function CommandPalette({ onToggleTheme }: { onToggleTheme: () =>
         ...recentItems.map((r) => ({ ...r, group: "Recent" })),
         ...others,
       ];
+    }
+    if (!fuse) {
+      const lower = q.toLowerCase();
+      return items.filter((i) => i.label.toLowerCase().includes(lower));
     }
     return fuse.search(q).map((r) => r.item);
   }, [q, fuse, items, recents]);
