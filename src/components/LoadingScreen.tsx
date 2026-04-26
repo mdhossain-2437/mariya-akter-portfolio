@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 
 export default function LoadingScreen() {
   const [done, setDone] = useState(() => {
-    if (typeof window === "undefined") return false;
+    if (typeof window === "undefined") return true;
     try {
-      return Boolean(sessionStorage.getItem("intro-seen"));
+      if (sessionStorage.getItem("intro-seen")) return true;
     } catch {
-      return false;
+      // storage unavailable, still show once
     }
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return true;
+    return false;
   });
   const [count, setCount] = useState(0);
 
@@ -17,7 +20,7 @@ export default function LoadingScreen() {
     if (done) return;
     let raf = 0;
     const start = performance.now();
-    const total = 1700;
+    const total = 650;
     const tick = () => {
       const elapsed = performance.now() - start;
       const pct = Math.min(100, Math.round((elapsed / total) * 100));
@@ -25,8 +28,12 @@ export default function LoadingScreen() {
       if (elapsed < total) {
         raf = requestAnimationFrame(tick);
       } else {
-        sessionStorage.setItem("intro-seen", "1");
-        setTimeout(() => setDone(true), 350);
+        try {
+          sessionStorage.setItem("intro-seen", "1");
+        } catch {
+          // ignore
+        }
+        setTimeout(() => setDone(true), 120);
       }
     };
     raf = requestAnimationFrame(tick);
@@ -39,7 +46,7 @@ export default function LoadingScreen() {
         <motion.div
           initial={{ y: 0 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[100] bg-app text-fg flex items-end justify-between px-6 md:px-12 pb-10 md:pb-14"
         >
           <div className="flex items-end gap-6">

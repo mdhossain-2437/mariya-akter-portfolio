@@ -23,8 +23,8 @@ export default {
           200: "#D4CDC6",
         },
         accent: {
-          DEFAULT: "#C9421A",
-          dark: "#B0381A",
+          DEFAULT: "#B33717",
+          dark: "#8E2A11",
           light: "#E55A28",
           50: "#FCEFE8",
           100: "#F8DFD0",
