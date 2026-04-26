@@ -32,6 +32,7 @@ export default function Contact() {
   const [company, setCompany] = useState("");
   const [narrative, setNarrative] = useState("");
   const [sent, setSent] = useState(false);
+  const [fallback, setFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
 
@@ -103,9 +104,9 @@ export default function Contact() {
       setSent(true);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong sending your inquiry.";
-      setError(`${message} Opening your mail app as a fallback…`);
+      setError(message);
       mailtoFallback();
-      setSent(true);
+      setFallback(true);
     } finally {
       setSending(false);
     }
@@ -308,7 +309,7 @@ export default function Contact() {
                     </motion.div>
                   )}
 
-                  {sent && (
+                  {sent && !fallback && (
                     <motion.div
                       key="sent"
                       initial={{ opacity: 0, scale: 0.96 }}
@@ -324,10 +325,43 @@ export default function Contact() {
                       </p>
                     </motion.div>
                   )}
+
+                  {fallback && (
+                    <motion.div
+                      key="fallback"
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-center py-16"
+                    >
+                      <p className="label-muted">Couldn&apos;t reach the studio inbox</p>
+                      <h2 className="heading-display mt-6">Please finish sending in your mail app.</h2>
+                      <p className="mt-6 text-fg-muted max-w-md mx-auto">
+                        Our server didn&apos;t respond, so we opened your default mail client with your note pre-filled. Hit <em>Send</em> there and it lands in our inbox, or email <a className="text-accent hover:underline" href="mailto:hello@mariyaakter.me">hello@mariyaakter.me</a> directly.
+                      </p>
+                      {error && (
+                        <p role="alert" className="mt-6 text-xs text-[var(--accent)]">
+                          Server said: {error}
+                        </p>
+                      )}
+                      <div className="mt-8">
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          onClick={() => {
+                            setFallback(false);
+                            setError(null);
+                          }}
+                        >
+                          Try sending again <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
                 </AnimatePresence>
               </div>
 
-              {!sent && (
+              {!sent && !fallback && (
                 <>
                   {error && step === 4 && (
                     <p role="alert" className="mt-6 text-sm text-[var(--accent)]">
