@@ -8,6 +8,7 @@ type Props = {
 };
 
 const SITE = "https://mariyaakter.me";
+const DEFAULT_IMAGE = `${SITE}/og-cover.jpg`;
 const DEFAULT_DESC =
   "Mariya Akter — Multidisciplinary designer crafting intentional brand identities, fashion direction, and digital strategy. Studio in Dhaka, clients worldwide.";
 
@@ -19,7 +20,7 @@ export default function Seo({ title, description, image, path }: Props) {
     ? image.startsWith("http")
       ? image
       : `${SITE}${image.startsWith("/") ? "" : "/"}${image}`
-    : null;
+    : DEFAULT_IMAGE;
   return (
     <Helmet>
       <title>{pageTitle}</title>
@@ -29,11 +30,11 @@ export default function Seo({ title, description, image, path }: Props) {
       <meta property="og:description" content={desc} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
-      {img && <meta property="og:image" content={img} />}
-      <meta name="twitter:card" content={img ? "summary_large_image" : "summary"} />
+      <meta property="og:image" content={img} />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={desc} />
-      {img && <meta name="twitter:image" content={img} />}
+      <meta name="twitter:image" content={img} />
     </Helmet>
   );
 }
