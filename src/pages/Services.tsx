@@ -109,7 +109,7 @@ export default function Services() {
           <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-center">
             <div className={`md:col-span-7 ${s.flip ? "md:order-2" : ""}`}>
               <div className="aspect-[4/3] overflow-hidden bg-ink-900">
-                <img src={s.image} alt={s.title} className="w-full h-full object-cover" />
+                <img src={s.image} alt={s.title} loading="lazy" decoding="async" width="800" height="1000" className="w-full h-full object-cover" />
               </div>
             </div>
             <div className={`md:col-span-5 ${s.flip ? "md:order-1" : ""}`}>

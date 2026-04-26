@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 const CAPABILITIES = [
   {
@@ -42,6 +43,11 @@ const CAPABILITIES = [
 export default function Expertise() {
   return (
     <div className="pt-16 md:pt-20">
+      <Seo
+        title="Expertise"
+        path="/expertise"
+        description="Three disciplines, one operating system — brand identity, digital marketing strategy, and creative direction."
+      />
       <section className="container-narrow pt-12 md:pt-20 pb-20">
         <p className="label">Capabilities & Method</p>
         <h1 className="mt-6 font-serif text-fg leading-[1] text-[clamp(3rem,9vw,7rem)]">
@@ -63,6 +69,10 @@ export default function Expertise() {
                   <img
                     src={c.image}
                     alt={c.title}
+                    loading="lazy"
+                    decoding="async"
+                    width="1200"
+                    height="900"
                     className="w-full h-full object-cover"
                   />
                 </div>

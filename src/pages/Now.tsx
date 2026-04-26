@@ -1,9 +1,15 @@
 import Reveal from "../components/Reveal";
+import Seo from "../components/Seo";
 import { now } from "../data/now";
 
 export default function Now() {
   return (
     <div className="pt-24 md:pt-32">
+      <Seo
+        title="Now"
+        path="/now"
+        description="What Mariya's studio is working on right now — current clients, open inquiries, and the state of the desk."
+      />
       <section className="container-narrow">
         <Reveal>
           <p className="label">Updated {now.updated} · Inspired by Derek Sivers</p>

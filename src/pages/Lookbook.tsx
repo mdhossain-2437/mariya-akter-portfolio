@@ -22,7 +22,7 @@ function DragRow({ images }: { images: string[] }) {
             transition={{ duration: 0.7, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="snap-start shrink-0 w-[80vw] md:w-[55vw] lg:w-[36vw] aspect-[4/5] overflow-hidden bg-ink-900"
           >
-            <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <img src={src} alt="" loading="lazy" decoding="async" width="900" height="1125" className="w-full h-full object-cover" />
           </motion.div>
         ))}
       </div>

@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Reveal from "../components/Reveal";
+import Seo from "../components/Seo";
 import { processSteps, principles } from "../data/process";
 
 function StepRow({ step, idx }: { step: typeof processSteps[number]; idx: number }) {
@@ -41,6 +42,11 @@ function StepRow({ step, idx }: { step: typeof processSteps[number]; idx: number
 export default function Process() {
   return (
     <div className="pt-24 md:pt-32">
+      <Seo
+        title="Process"
+        path="/process"
+        description="The six movements from listening to tending — how a Mariya Akter Studio engagement unfolds, step by step."
+      />
       <section className="container-wide">
         <Reveal>
           <p className="label">Method</p>

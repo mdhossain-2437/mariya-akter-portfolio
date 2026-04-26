@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
     "@vercel/node": "^5.7.13",
     "autoprefixer": "^10.5.0",
     "clsx": "^2.1.1",

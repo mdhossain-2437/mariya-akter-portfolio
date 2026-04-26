@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
@@ -17,27 +17,31 @@ import Seo from "./components/Seo";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useTheme } from "./context/useTheme";
 
+// Home is eager (needed for LCP on first paint).
 import Home from "./pages/Home";
-import Work from "./pages/Work";
-import Archive from "./pages/Archive";
-import CaseStudy from "./pages/CaseStudy";
-import Expertise from "./pages/Expertise";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Journal from "./pages/Journal";
-import JournalEntry from "./pages/JournalEntry";
-import Contact from "./pages/Contact";
-import Privacy from "./pages/Privacy";
-import NotFound from "./pages/NotFound";
-import Lookbook from "./pages/Lookbook";
-import Process from "./pages/Process";
-import Press from "./pages/Press";
-import Clients from "./pages/Clients";
-import Now from "./pages/Now";
-import FAQ from "./pages/FAQ";
-import Pricing from "./pages/Pricing";
-import Terms from "./pages/Terms";
-import Capabilities from "./pages/Capabilities";
+
+// Everything else is lazy-loaded — keeps the initial JS bundle small.
+const Work = lazy(() => import("./pages/Work"));
+const Archive = lazy(() => import("./pages/Archive"));
+const CaseStudy = lazy(() => import("./pages/CaseStudy"));
+const Expertise = lazy(() => import("./pages/Expertise"));
+const About = lazy(() => import("./pages/About"));
+const Services = lazy(() => import("./pages/Services"));
+const Journal = lazy(() => import("./pages/Journal"));
+const JournalEntry = lazy(() => import("./pages/JournalEntry"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Lookbook = lazy(() => import("./pages/Lookbook"));
+const Process = lazy(() => import("./pages/Process"));
+const Press = lazy(() => import("./pages/Press"));
+const Clients = lazy(() => import("./pages/Clients"));
+const Now = lazy(() => import("./pages/Now"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Capabilities = lazy(() => import("./pages/Capabilities"));
+const Projects = lazy(() => import("./pages/Projects"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -65,29 +69,32 @@ function AppRoutes() {
       <main id="main" className="relative">
         <AnimatePresence mode="wait" initial={false}>
           <PageTransition key={location.pathname}>
-            <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/work" element={<Work />} />
-              <Route path="/work/:slug" element={<CaseStudy />} />
-              <Route path="/lookbook" element={<Lookbook />} />
-              <Route path="/archive" element={<Archive />} />
-              <Route path="/expertise" element={<Expertise />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/process" element={<Process />} />
-              <Route path="/capabilities" element={<Capabilities />} />
-              <Route path="/press" element={<Press />} />
-              <Route path="/clients" element={<Clients />} />
-              <Route path="/now" element={<Now />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/journal" element={<Journal />} />
-              <Route path="/journal/:slug" element={<JournalEntry />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={<div className="min-h-[60vh]" aria-hidden="true" />}>
+              <Routes location={location}>
+                <Route path="/" element={<Home />} />
+                <Route path="/work" element={<Work />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/work/:slug" element={<CaseStudy />} />
+                <Route path="/lookbook" element={<Lookbook />} />
+                <Route path="/archive" element={<Archive />} />
+                <Route path="/expertise" element={<Expertise />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/process" element={<Process />} />
+                <Route path="/capabilities" element={<Capabilities />} />
+                <Route path="/press" element={<Press />} />
+                <Route path="/clients" element={<Clients />} />
+                <Route path="/now" element={<Now />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/journal" element={<Journal />} />
+                <Route path="/journal/:slug" element={<JournalEntry />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </PageTransition>
         </AnimatePresence>
       </main>

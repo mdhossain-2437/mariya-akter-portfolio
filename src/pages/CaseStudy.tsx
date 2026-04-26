@@ -1,5 +1,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { projects } from "../data/projects";
+import Seo from "../components/Seo";
 
 export default function CaseStudy() {
   const { slug } = useParams();
@@ -9,8 +11,29 @@ export default function CaseStudy() {
   // For projects without full case study, show a slimmed view
   const hasFullCase = !!project.challenge;
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": project.title,
+    "description": project.blurb,
+    "image": project.cover,
+    "datePublished": project.year,
+    "author": { "@type": "Person", "name": "Mariya Akter", "url": "https://mariyaakter.me/" },
+    "url": `https://mariyaakter.me/work/${project.slug}`,
+    "genre": project.category,
+  };
+
   return (
     <div className="pt-16 md:pt-20">
+      <Seo
+        title={project.title}
+        path={`/work/${project.slug}`}
+        description={project.blurb}
+        image={project.cover}
+      />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
+      </Helmet>
       <section className="container-narrow pt-12 md:pt-16 pb-16">
         <p className="label">Case Study — {project.year}</p>
         <div className="mt-4 grid md:grid-cols-12 gap-8 items-end">
@@ -54,6 +77,10 @@ export default function CaseStudy() {
             <img
               src={project.cover}
               alt={project.title}
+              fetchPriority="high"
+              decoding="async"
+              width="1600"
+              height="1000"
               className="w-full h-full object-cover"
             />
           </div>
@@ -87,7 +114,7 @@ export default function CaseStudy() {
                   {project.gallery.map((g, i) => (
                     <div key={i} className={i % 3 === 1 ? "md:mt-20" : ""}>
                       <div className="aspect-square overflow-hidden bg-ink-900">
-                        <img src={g.src} alt="" className="w-full h-full object-cover" />
+                        <img src={g.src} alt={g.caption ?? ""} loading="lazy" decoding="async" width="1200" height="900" className="w-full h-full object-cover" />
                       </div>
                       {g.caption && (
                         <div className="mt-5">

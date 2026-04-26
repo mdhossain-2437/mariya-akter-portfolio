@@ -30,6 +30,10 @@ export default function About() {
               <img
                 src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80"
                 alt="Mariya Akter"
+                loading="lazy"
+                decoding="async"
+                width="900"
+                height="1125"
                 className="w-full h-full object-cover grayscale"
               />
             </div>

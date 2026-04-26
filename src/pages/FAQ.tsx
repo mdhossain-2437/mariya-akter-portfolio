@@ -1,12 +1,31 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import Reveal from "../components/Reveal";
+import Seo from "../components/Seo";
 import { faq } from "../data/faq";
 
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((f) => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a },
+    })),
+  };
   return (
     <div className="pt-24 md:pt-32">
+      <Seo
+        title="FAQ"
+        path="/faq"
+        description="Honest answers to the questions that come up before we work together — timelines, fees, revisions, process, and what 'partnership' really means."
+      />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      </Helmet>
       <section className="container-narrow">
         <Reveal><p className="label">FAQ</p></Reveal>
         <Reveal delay={0.1}>
