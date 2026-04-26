@@ -168,7 +168,7 @@ export default function Contact() {
 
               <div className="mt-8 min-h-[420px]">
                 <AnimatePresence mode="wait">
-                  {!sent && step === 1 && (
+                  {!sent && !fallback && step === 1 && (
                     <motion.div key="step1" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
                       <p className="label-muted">01 · Nature</p>
                       <h2 className="font-serif text-3xl mt-3">What kind of work?</h2>
@@ -192,7 +192,7 @@ export default function Contact() {
                     </motion.div>
                   )}
 
-                  {!sent && step === 2 && (
+                  {!sent && !fallback && step === 2 && (
                     <motion.div key="step2" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
                       <p className="label-muted">02 · Scope</p>
                       <h2 className="font-serif text-3xl mt-3">How big is the room?</h2>
@@ -228,7 +228,7 @@ export default function Contact() {
                     </motion.div>
                   )}
 
-                  {!sent && step === 3 && (
+                  {!sent && !fallback && step === 3 && (
                     <motion.div key="step3" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
                       <p className="label-muted">03 · Timeline</p>
                       <h2 className="font-serif text-3xl mt-3">When does it want to land?</h2>
@@ -262,7 +262,7 @@ export default function Contact() {
                     </motion.div>
                   )}
 
-                  {!sent && step === 4 && (
+                  {!sent && !fallback && step === 4 && (
                     <motion.div key="step4" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
                       <p className="label-muted">04 · You</p>
                       <h2 className="font-serif text-3xl mt-3">Who is sending this?</h2>
