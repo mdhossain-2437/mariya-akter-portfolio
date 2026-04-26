@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, lazy, Suspense, useState } from "react";
-import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -81,10 +80,9 @@ function AppRoutes() {
       <ScrollToTop />
       <Header />
       <main id="main" className="relative">
-        <AnimatePresence mode="wait" initial={false}>
-          <PageTransition key={location.pathname}>
-            <Suspense fallback={<div className="min-h-[60vh]" aria-hidden="true" />}>
-              <Routes location={location}>
+        <PageTransition key={location.pathname}>
+          <Suspense fallback={<div className="min-h-[60vh]" aria-hidden="true" />}>
+            <Routes location={location}>
                 <Route path="/" element={<Home />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/projects" element={<Projects />} />
@@ -107,10 +105,9 @@ function AppRoutes() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </PageTransition>
-        </AnimatePresence>
+            </Routes>
+          </Suspense>
+        </PageTransition>
       </main>
       <Footer />
       {ambientReady && (
