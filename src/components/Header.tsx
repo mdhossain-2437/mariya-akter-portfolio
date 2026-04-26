@@ -134,6 +134,7 @@ export default function Header() {
                 <Link to="/process" className="chip">Process</Link>
                 <Link to="/press" className="chip">Press</Link>
                 <Link to="/clients" className="chip">Clients</Link>
+                <Link to="/capabilities" className="chip">Capabilities</Link>
                 <Link to="/now" className="chip">Now</Link>
                 <Link to="/faq" className="chip">FAQ</Link>
                 <Link to="/pricing" className="chip">Pricing</Link>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "../components/Arrow";
+import Seo from "../components/Seo";
 
 export default function About() {
   const [form, setForm] = useState({
@@ -20,6 +21,7 @@ export default function About() {
 
   return (
     <div className="pt-16 md:pt-20">
+      <Seo title="Studio" path="/about" description="Inside the operating system of an independent design studio. Story, values, tools, and the principles that anchor the work." />
       {/* About */}
       <section className="container-narrow pt-12 md:pt-20 pb-24 md:pb-32">
         <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-start">

@@ -1,5 +1,9 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
+import SmartImage from "../components/SmartImage";
 import { journalPosts, previousCurations } from "../data/journal";
+import { ArrowRight } from "../components/Arrow";
 
 export default function Journal() {
   const [email, setEmail] = useState("");
@@ -10,6 +14,11 @@ export default function Journal() {
 
   return (
     <div className="pt-16 md:pt-20">
+      <Seo
+        title="Journal"
+        path="/journal"
+        description="Curated essays on design, fashion, and digital strategy. Where the studio thinks out loud."
+      />
       <section className="container-narrow pt-12 md:pt-20 pb-16">
         <div className="grid md:grid-cols-12 gap-10 items-end">
           <div className="md:col-span-7 fade-up">
@@ -29,83 +38,76 @@ export default function Journal() {
 
       {/* Featured */}
       <section className="container-narrow pb-20">
-        <div className="grid md:grid-cols-12 gap-10 items-center">
-          <div className="md:col-span-8 relative">
-            <div className="aspect-[5/4] overflow-hidden bg-ink-900">
-              <img
-                src={featured.cover}
-                alt={featured.title}
-                className="w-full h-full object-cover"
-              />
+        <Link to={`/journal/${featured.slug}`} className="block group">
+          <div className="grid md:grid-cols-12 gap-10 items-center">
+            <div className="md:col-span-8 relative">
+              <SmartImage src={featured.cover} alt={featured.title} aspect="aspect-[5/4]" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
+              <div className="md:absolute md:bottom-12 md:right-[-15%] mt-4 md:mt-0 bg-app p-6 md:p-8 max-w-md shadow-xl border border-line">
+                <p className="label-muted">{featured.category}</p>
+                <h3 className="mt-3 font-serif italic text-xl md:text-2xl text-fg leading-tight group-hover:text-accent transition-colors">
+                  {featured.title}
+                </h3>
+                <p className="mt-3 text-sm text-fg-muted">{featured.excerpt}</p>
+                <span className="mt-4 inline-flex items-center gap-2 label">
+                  Read journal <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
             </div>
-            <div className="md:absolute md:bottom-12 md:right-[-15%] mt-4 md:mt-0 bg-app p-6 md:p-8 max-w-md shadow-xl">
-              <p className="label">{featured.category}</p>
-              <h3 className="mt-3 font-serif italic text-xl md:text-2xl text-fg leading-tight">
-                {featured.title}
-              </h3>
-              <p className="mt-3 text-sm text-fg-muted">{featured.excerpt}</p>
-              <a
-                href="#"
-                className="mt-4 inline-block label hover:text-accent-dark"
-              >
-                Read Journal →
-              </a>
+            <div className="md:col-span-4 md:text-right">
+              <p className="label-muted">{featured.date}</p>
             </div>
           </div>
-          <div className="md:col-span-4 md:text-right">
-            <p className="label-muted">{featured.date}</p>
-          </div>
-        </div>
+        </Link>
       </section>
 
       {/* Two-up grid */}
       <section className="container-narrow py-12">
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-12">
           {others.map((p, i) => (
-            <article key={p.slug} className={i === 1 ? "md:mt-24" : ""}>
-              <div className="aspect-[4/3] overflow-hidden bg-ink-900">
-                <img src={p.cover} alt={p.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="mt-5 flex items-center justify-between">
-                <p className="label-muted">{p.category}</p>
-                <p className="label-muted">{p.date}</p>
-              </div>
-              <h3 className="mt-3 font-serif italic text-xl md:text-2xl text-fg leading-snug">
-                {p.title}
-              </h3>
-              <p className="mt-3 text-fg-muted text-sm leading-relaxed">{p.excerpt}</p>
-            </article>
+            <Link key={p.slug} to={`/journal/${p.slug}`} className={`group ${i === 1 ? "md:mt-24" : ""}`}>
+              <article>
+                <SmartImage src={p.cover} alt={p.title} aspect="aspect-[4/3]" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
+                <div className="mt-5 flex items-center justify-between">
+                  <p className="label-muted">{p.category}</p>
+                  <p className="label-muted">{p.date}</p>
+                </div>
+                <h3 className="mt-3 font-serif italic text-xl md:text-2xl text-fg leading-snug group-hover:text-accent transition-colors">
+                  {p.title}
+                </h3>
+                <p className="mt-3 text-fg-muted text-sm leading-relaxed">{p.excerpt}</p>
+              </article>
+            </Link>
           ))}
         </div>
       </section>
 
       {/* Future Trends */}
       <section className="container-narrow py-20">
-        <div className="bg-app-elev rounded-sm p-8 md:p-14 grid md:grid-cols-12 gap-10 items-center relative overflow-hidden">
-          <div className="absolute font-serif italic text-[10rem] text-fg-muted/30 leading-none -bottom-10 left-1/4 select-none pointer-events-none">
-            Future
-          </div>
-          <div className="md:col-span-7 relative">
-            <p className="label">{futureTrend.category}</p>
-            <h3 className="mt-4 font-serif italic text-3xl md:text-5xl leading-tight text-fg">
-              {futureTrend.title}
-            </h3>
-            <p className="mt-5 max-w-md text-fg-muted leading-relaxed">
-              {futureTrend.excerpt}
-            </p>
-            <a href="#" className="mt-6 inline-block btn-outline">Read Deep Dive</a>
-          </div>
-          <div className="md:col-span-5">
-            <div className="aspect-square overflow-hidden bg-ink-900 rotate-2 shadow-xl">
-              <img src={futureTrend.cover} alt={futureTrend.title} className="w-full h-full object-cover" />
+        <Link to={`/journal/${futureTrend.slug}`} className="block group">
+          <div className="bg-app-elev rounded-sm p-8 md:p-14 grid md:grid-cols-12 gap-10 items-center relative overflow-hidden">
+            <div className="absolute font-serif italic text-[10rem] text-fg-muted/30 leading-none -bottom-10 left-1/4 select-none pointer-events-none">
+              Future
+            </div>
+            <div className="md:col-span-7 relative">
+              <p className="label">{futureTrend.category}</p>
+              <h3 className="mt-4 font-serif italic text-3xl md:text-5xl leading-tight text-fg group-hover:text-accent transition-colors">
+                {futureTrend.title}
+              </h3>
+              <p className="mt-5 max-w-md text-fg-muted leading-relaxed">
+                {futureTrend.excerpt}
+              </p>
+              <span className="mt-6 inline-block btn-outline">Read deep dive</span>
+            </div>
+            <div className="md:col-span-5">
+              <SmartImage src={futureTrend.cover} alt={futureTrend.title} aspect="aspect-square" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
             </div>
           </div>
-        </div>
+        </Link>
       </section>
 
       {/* Previous curations */}
       <section className="container-narrow py-20">
-        <p className="label-muted text-center">Previous Curations</p>
+        <p className="label-muted text-center">Previous curations</p>
         <ul className="mt-10 max-w-4xl mx-auto divide-y divide-[var(--line)]">
           {previousCurations.map((c) => (
             <li key={c.title} className="flex items-center justify-between py-6 md:py-8 gap-6">
@@ -121,9 +123,9 @@ export default function Journal() {
 
       {/* Newsletter */}
       <section className="container-narrow pb-24">
-        <div className="bg-app-elev rounded-sm py-16 px-6 md:px-12 text-center">
+        <div className="bg-app-elev rounded-sm py-16 px-6 md:px-12 text-center border border-line">
           <h3 className="font-serif italic text-3xl md:text-4xl text-fg">
-            Weekly Perspectives
+            Weekly perspectives
           </h3>
           <p className="mt-3 max-w-md mx-auto text-fg-muted">
             Join 5,000+ professionals receiving curated insights on design, strategy,
@@ -146,7 +148,7 @@ export default function Journal() {
               placeholder="Your email address"
               className="w-full bg-app border border-line px-5 py-4 outline-none focus:border-accent placeholder:italic placeholder:text-fg-muted text-center"
             />
-            <button type="submit" className="mt-4 label hover:text-accent-dark">
+            <button type="submit" className="mt-4 label hover:text-accent">
               {subbed ? "Subscribed →" : "Subscribe →"}
             </button>
           </form>
