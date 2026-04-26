@@ -35,10 +35,10 @@ export default function About() {
 
           <div className="md:col-span-7 fade-up-delay-1">
             <p className="label">From Dhaka to the World</p>
-            <h1 className="mt-4 font-serif italic text-ink-900 leading-[1.05] text-[clamp(2.4rem,5.5vw,4.5rem)]">
+            <h1 className="mt-4 font-serif italic text-fg leading-[1.05] text-[clamp(2.4rem,5.5vw,4.5rem)]">
               Bridging cultural heritage <em className="not-italic">with</em> contemporary digital design.
             </h1>
-            <div className="mt-8 grid sm:grid-cols-2 gap-6 text-ink-700 leading-relaxed text-[0.95rem]">
+            <div className="mt-8 grid sm:grid-cols-2 gap-6 text-fg-muted leading-relaxed text-[0.95rem]">
               <p>
                 Born in the vibrant landscapes of Bangladesh, Mariya's creative
                 journey is a synthesis of traditional craftsmanship and modern
@@ -61,24 +61,24 @@ export default function About() {
       </section>
 
       {/* Contact form */}
-      <section className="bg-cream-200 py-24 md:py-32">
+      <section className="bg-app-elev py-24 md:py-32">
         <div className="container-narrow grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
-            <h2 className="font-serif italic text-3xl md:text-4xl text-ink-900">
+            <h2 className="font-serif italic text-3xl md:text-4xl text-fg">
               Start a conversation.
             </h2>
-            <p className="mt-4 text-ink-700 leading-relaxed text-[0.95rem]">
+            <p className="mt-4 text-fg-muted leading-relaxed text-[0.95rem]">
               Available for select collaborations and creative consulting. Whether you
               have a project in mind or just want to say hi, I'm all ears.
             </p>
             <div className="mt-10 space-y-6">
               <div>
                 <p className="label-muted">Location</p>
-                <p className="mt-2 text-ink-800">London / Dubai / Dhaka</p>
+                <p className="mt-2 text-fg">London / Dubai / Dhaka</p>
               </div>
               <div>
                 <p className="label-muted">Direct</p>
-                <a href="mailto:hello@mariyaakter.me" className="mt-2 inline-block underline underline-offset-4 text-ink-800 hover:text-accent">
+                <a href="mailto:hello@mariyaakter.me" className="mt-2 inline-block underline underline-offset-4 text-fg hover:text-accent">
                   hello@mariyaakter.me
                 </a>
               </div>
@@ -88,7 +88,7 @@ export default function About() {
           <div className="md:col-span-8">
             <form
               onSubmit={submit}
-              className="bg-cream-100 rounded-sm p-8 md:p-12 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.25)]"
+              className="bg-app rounded-sm p-8 md:p-12 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.25)]"
             >
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
@@ -98,7 +98,7 @@ export default function About() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="John Doe"
-                    className="mt-2 w-full bg-transparent border-b border-ink-300 focus:border-accent outline-none py-2 placeholder:italic placeholder:text-ink-400"
+                    className="mt-2 w-full bg-transparent border-b border-line focus:border-accent outline-none py-2 placeholder:italic placeholder:text-fg-muted"
                   />
                 </div>
                 <div>
@@ -109,7 +109,7 @@ export default function About() {
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="john@example.com"
-                    className="mt-2 w-full bg-transparent border-b border-ink-300 focus:border-accent outline-none py-2 placeholder:italic placeholder:text-ink-400"
+                    className="mt-2 w-full bg-transparent border-b border-line focus:border-accent outline-none py-2 placeholder:italic placeholder:text-fg-muted"
                   />
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function About() {
                 <select
                   value={form.interest}
                   onChange={(e) => setForm({ ...form, interest: e.target.value })}
-                  className="mt-2 w-full bg-transparent border-b border-ink-300 focus:border-accent outline-none py-2 appearance-none text-ink-800"
+                  className="mt-2 w-full bg-transparent border-b border-line focus:border-accent outline-none py-2 appearance-none text-fg"
                 >
                   <option>Art Direction</option>
                   <option>Brand Identity</option>
@@ -137,12 +137,12 @@ export default function About() {
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder="Tell me about your vision..."
-                  className="mt-2 w-full bg-transparent border-b border-ink-300 focus:border-accent outline-none py-2 placeholder:italic placeholder:text-ink-400 resize-none"
+                  className="mt-2 w-full bg-transparent border-b border-line focus:border-accent outline-none py-2 placeholder:italic placeholder:text-fg-muted resize-none"
                 />
               </div>
 
               <div className="mt-10 flex items-center justify-between gap-4">
-                <p className="text-sm text-ink-500">
+                <p className="text-sm text-fg-muted">
                   {sent ? "Inquiry received — replying within 48 hours." : ""}
                 </p>
                 <button type="submit" className="btn-primary">

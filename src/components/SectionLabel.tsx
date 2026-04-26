@@ -12,7 +12,7 @@ export default function SectionLabel({
   return (
     <p
       className={`uppercase tracking-widest2 text-[0.7rem] sm:text-xs font-medium ${
-        muted ? "text-ink-500" : "text-accent"
+        muted ? "text-fg-muted" : "text-accent"
       } ${className}`}
     >
       {children}

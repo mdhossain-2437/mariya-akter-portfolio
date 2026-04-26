@@ -15,33 +15,33 @@ export default function CaseStudy() {
         <p className="label">Case Study — {project.year}</p>
         <div className="mt-4 grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-8">
-            <h1 className="font-serif text-ink-900 leading-[1] text-[clamp(3rem,10vw,8rem)]">
+            <h1 className="font-serif text-fg leading-[1] text-[clamp(3rem,10vw,8rem)]">
               {project.title.split(" ")[0]}
               <span className="italic"> {project.title.split(" ").slice(1).join(" ")}</span>
             </h1>
           </div>
           <div className="md:col-span-4">
-            <p className="text-ink-700 leading-relaxed">{project.blurb}</p>
+            <p className="text-fg-muted leading-relaxed">{project.blurb}</p>
           </div>
         </div>
 
         {hasFullCase && (
-          <div className="mt-16 md:mt-20 pt-8 border-t border-ink-200 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="mt-16 md:mt-20 pt-8 border-t border-line grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <p className="label-muted">Duration</p>
-              <p className="mt-2 text-ink-800">{project.duration}</p>
+              <p className="mt-2 text-fg">{project.duration}</p>
             </div>
             <div>
               <p className="label-muted">Role</p>
-              <p className="mt-2 text-ink-800">{project.role}</p>
+              <p className="mt-2 text-fg">{project.role}</p>
             </div>
             <div>
               <p className="label-muted">Tools</p>
-              <p className="mt-2 text-ink-800">{project.tools}</p>
+              <p className="mt-2 text-fg">{project.tools}</p>
             </div>
             <div>
               <p className="label-muted">Industry</p>
-              <p className="mt-2 text-ink-800">{project.industry}</p>
+              <p className="mt-2 text-fg">{project.industry}</p>
             </div>
           </div>
         )}
@@ -70,8 +70,8 @@ export default function CaseStudy() {
                   The Challenge
                 </h2>
               </div>
-              <div className="md:col-span-8 space-y-6 text-ink-700 leading-relaxed">
-                <p className="text-xl md:text-2xl text-ink-900 font-serif italic">
+              <div className="md:col-span-8 space-y-6 text-fg-muted leading-relaxed">
+                <p className="text-xl md:text-2xl text-fg font-serif italic">
                   {project.challenge}
                 </p>
                 <p>{project.challengeBody}</p>
@@ -81,7 +81,7 @@ export default function CaseStudy() {
 
           {/* Gallery */}
           {project.gallery && (
-            <section className="bg-cream-200 py-24 md:py-32">
+            <section className="bg-app-elev py-24 md:py-32">
               <div className="container-narrow">
                 <div className="grid md:grid-cols-2 gap-8 md:gap-12">
                   {project.gallery.map((g, i) => (
@@ -91,11 +91,11 @@ export default function CaseStudy() {
                       </div>
                       {g.caption && (
                         <div className="mt-5">
-                          <h3 className="font-serif italic text-xl text-ink-900">
+                          <h3 className="font-serif italic text-xl text-fg">
                             {g.caption}
                           </h3>
                           {g.subcaption && (
-                            <p className="mt-2 text-ink-700 text-sm leading-relaxed max-w-md">
+                            <p className="mt-2 text-fg-muted text-sm leading-relaxed max-w-md">
                               {g.subcaption}
                             </p>
                           )}
@@ -113,7 +113,7 @@ export default function CaseStudy() {
             <section className="container-narrow py-24 md:py-32">
               <div className="text-center">
                 <p className="label">Impact & Growth</p>
-                <h2 className="font-serif italic text-3xl md:text-5xl mt-4 text-ink-900">
+                <h2 className="font-serif italic text-3xl md:text-5xl mt-4 text-fg">
                   Defining the New Luxury
                 </h2>
               </div>
@@ -121,7 +121,7 @@ export default function CaseStudy() {
                 {project.stats.map((s) => (
                   <div
                     key={s.label}
-                    className="bg-cream-200 p-10 text-center rounded-sm"
+                    className="bg-app-elev p-10 text-center rounded-sm"
                   >
                     <p className="font-serif text-5xl md:text-6xl text-accent">
                       {s.value}
@@ -155,7 +155,7 @@ export default function CaseStudy() {
             <h2 className="mt-4 font-serif text-4xl md:text-7xl">{project.next.title}</h2>
             <Link
               to={`/work/${project.next.slug}`}
-              className="mt-10 inline-flex items-center gap-3 uppercase tracking-widest2 text-xs font-semibold border-t border-b border-cream-100/40 py-3 px-8 hover:bg-cream-100 hover:text-ink-900 transition-colors"
+              className="mt-10 inline-flex items-center gap-3 uppercase tracking-widest2 text-xs font-semibold border-t border-b border-cream-100/40 py-3 px-8 hover:bg-app hover:text-fg transition-colors"
             >
               View Case Study
             </Link>

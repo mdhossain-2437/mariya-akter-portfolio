@@ -89,13 +89,13 @@ export default function Services() {
     <div className="pt-16 md:pt-20">
       <section className="container-narrow pt-12 md:pt-20 pb-20">
         <p className="label">Services & Pricing</p>
-        <h1 className="mt-6 font-serif text-ink-900 leading-[1.02] text-[clamp(2.6rem,7vw,5.5rem)]">
+        <h1 className="mt-6 font-serif text-fg leading-[1.02] text-[clamp(2.6rem,7vw,5.5rem)]">
           <em>Cultivating brands</em> through<br />
           intentional design <em>and strategic</em>
           <br />
           narrative.
         </h1>
-        <p className="mt-8 max-w-xl text-ink-700 leading-relaxed">
+        <p className="mt-8 max-w-xl text-fg-muted leading-relaxed">
           A multidisciplinary approach to elevate your vision. I partner with
           founders and creative houses to bridge the gap between aesthetic excellence
           and commercial performance.
@@ -112,8 +112,8 @@ export default function Services() {
             </div>
             <div className={`md:col-span-5 ${s.flip ? "md:order-1" : ""}`}>
               <p className="font-serif italic text-accent">{s.n} —</p>
-              <h3 className="mt-3 font-serif text-3xl md:text-4xl text-ink-900">{s.title}</h3>
-              <p className="mt-4 text-ink-700 leading-relaxed">{s.body}</p>
+              <h3 className="mt-3 font-serif text-3xl md:text-4xl text-fg">{s.title}</h3>
+              <p className="mt-4 text-fg-muted leading-relaxed">{s.body}</p>
               <ul className="mt-6 space-y-2">
                 {s.bullets.map((b) => (
                   <li key={b} className="flex items-center gap-3 label-muted">
@@ -128,10 +128,10 @@ export default function Services() {
       ))}
 
       {/* Pricing */}
-      <section className="bg-cream-200 py-24 md:py-32">
+      <section className="bg-app-elev py-24 md:py-32">
         <div className="container-narrow text-center">
-          <h2 className="font-serif italic text-4xl md:text-5xl text-ink-900">Investment Tiers</h2>
-          <p className="mt-4 max-w-md mx-auto text-ink-700">
+          <h2 className="font-serif italic text-4xl md:text-5xl text-fg">Investment Tiers</h2>
+          <p className="mt-4 max-w-md mx-auto text-fg-muted">
             Transparent pricing designed for projects of all scales, from emerging
             boutiques to established global brands.
           </p>
@@ -143,8 +143,8 @@ export default function Services() {
               key={t.name}
               className={`relative rounded-sm p-8 md:p-10 flex flex-col ${
                 t.primary
-                  ? "bg-cream-100 border-t-2 border-accent shadow-[0_30px_60px_-30px_rgba(0,0,0,0.25)] md:-mt-4 md:-mb-4"
-                  : "bg-cream-100"
+                  ? "bg-app border-t-2 border-accent shadow-[0_30px_60px_-30px_rgba(0,0,0,0.25)] md:-mt-4 md:-mb-4"
+                  : "bg-app"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -157,8 +157,8 @@ export default function Services() {
                   </span>
                 )}
               </div>
-              <h3 className="mt-4 font-serif text-2xl md:text-3xl text-ink-900">{t.name}</h3>
-              <p className="mt-4 font-serif text-ink-900">
+              <h3 className="mt-4 font-serif text-2xl md:text-3xl text-fg">{t.name}</h3>
+              <p className="mt-4 font-serif text-fg">
                 <span className="text-sm align-top">$</span>
                 <span className="text-4xl md:text-5xl font-medium">
                   {t.price.replace("$", "").replace("from ", "")}
@@ -167,13 +167,13 @@ export default function Services() {
                   <span className="text-sm ml-1">k</span>
                 )}
                 {t.cadence && (
-                  <span className="text-sm text-ink-500 ml-2">{t.cadence}</span>
+                  <span className="text-sm text-fg-muted ml-2">{t.cadence}</span>
                 )}
               </p>
-              <p className="mt-6 text-ink-700 text-sm leading-relaxed">{t.blurb}</p>
+              <p className="mt-6 text-fg-muted text-sm leading-relaxed">{t.blurb}</p>
               <ul className="mt-6 space-y-3">
                 {t.features.map((f) => (
-                  <li key={f} className="flex items-start gap-3 text-ink-800 text-sm">
+                  <li key={f} className="flex items-start gap-3 text-fg text-sm">
                     <span className="text-accent">✓</span>
                     {f}
                   </li>
@@ -197,7 +197,7 @@ export default function Services() {
 
       {/* CTA */}
       <section className="container-narrow py-24 md:py-32 text-center">
-        <h2 className="font-serif italic text-4xl md:text-6xl text-ink-900 leading-tight">
+        <h2 className="font-serif italic text-4xl md:text-6xl text-fg leading-tight">
           Ready to define your <br />
           next chapter?
         </h2>

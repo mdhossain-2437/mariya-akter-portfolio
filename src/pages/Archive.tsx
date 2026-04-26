@@ -21,10 +21,10 @@ export default function Archive() {
       <section className="container-narrow pt-12 md:pt-20 pb-24">
         <div className="grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-7 fade-up">
-            <h1 className="font-serif italic text-ink-900 text-[clamp(3rem,9vw,7rem)] leading-[1]">
+            <h1 className="font-serif italic text-fg text-[clamp(3rem,9vw,7rem)] leading-[1]">
               Archive
             </h1>
-            <p className="mt-6 max-w-md text-ink-700 leading-relaxed">
+            <p className="mt-6 max-w-md text-fg-muted leading-relaxed">
               A comprehensive collection of digital artifacts, marketing strategies,
               and visual explorations spanning seven years of interdisciplinary
               practice.
@@ -32,13 +32,13 @@ export default function Archive() {
           </div>
           <div className="md:col-span-5 md:text-right">
             <p className="label-muted">Sorted By</p>
-            <p className="font-serif italic text-xl mt-2 text-ink-800">
+            <p className="font-serif italic text-xl mt-2 text-fg">
               Chronological Depth
             </p>
           </div>
         </div>
 
-        <div className="mt-14 pb-6 border-b border-ink-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="mt-14 pb-6 border-b border-line flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4 flex-wrap">
             <span className="label-muted">Category</span>
             <div className="flex items-center flex-wrap gap-2">
@@ -48,13 +48,13 @@ export default function Archive() {
                   onClick={() => setCat(c)}
                   className={`text-sm transition-colors ${
                     cat === c
-                      ? "text-ink-900 font-semibold"
-                      : "text-ink-500 hover:text-ink-800"
+                      ? "text-fg font-semibold"
+                      : "text-fg-muted hover:text-fg"
                   }`}
                 >
                   {c}
                   {i < CATEGORIES.length - 1 && (
-                    <span className="ml-2 text-ink-300">/</span>
+                    <span className="ml-2 text-fg-muted">/</span>
                   )}
                 </button>
               ))}
@@ -69,7 +69,7 @@ export default function Archive() {
                   key={y}
                   onClick={() => setYear(y)}
                   className={`text-sm transition-colors ${
-                    year === y ? "text-ink-900 font-semibold" : "text-ink-500 hover:text-ink-800"
+                    year === y ? "text-fg font-semibold" : "text-fg-muted hover:text-fg"
                   }`}
                 >
                   {y}
@@ -95,7 +95,7 @@ export default function Archive() {
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <h3 className="font-serif italic text-xl md:text-2xl text-ink-900 mt-5">
+              <h3 className="font-serif italic text-xl md:text-2xl text-fg mt-5">
                 {p.title}
               </h3>
               <p className="label-muted mt-2">
@@ -106,7 +106,7 @@ export default function Archive() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="text-center mt-24 text-ink-500 font-serif italic">
+          <p className="text-center mt-24 text-fg-muted font-serif italic">
             No projects match these filters.
           </p>
         )}
