@@ -16,11 +16,20 @@ const tree = (
   </StrictMode>
 );
 
-const isPrerendered = container.hasChildNodes();
+// Vercel's SPA rewrite serves dist/index.html for every route. The prerender
+// step stamps `data-ssr-path` on the root div so we know which route the
+// markup was actually rendered for. We can only safely hydrate when the
+// current pathname matches the prerendered route — otherwise we'd reconcile
+// e.g. an /about component tree against home-page DOM. For mismatching
+// paths we throw away the prerendered markup and start a fresh SPA render.
+const ssrPath = container.dataset.ssrPath;
+const canHydrate =
+  container.hasChildNodes() && ssrPath !== undefined && ssrPath === window.location.pathname;
 
-if (!isPrerendered) {
-  // No SSR markup (e.g. SPA fallback for non-prerendered routes) — boot
-  // a fresh client-side render.
+if (!canHydrate) {
+  // Either no SSR markup or the prerendered route doesn't match the current
+  // URL. Wipe whatever is in the root and boot a fresh client render.
+  container.innerHTML = "";
   createRoot(container).render(tree);
 } else {
   // Static HTML is fully painted. Wait for the first user signal — pointer,
