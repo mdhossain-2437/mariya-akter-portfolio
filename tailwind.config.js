@@ -24,9 +24,10 @@ export default {
         },
         accent: {
           // Track the CSS variable so light/dark themes share the Tailwind
-          // utility class. `--accent` is defined per-theme in index.css and
-          // already passes WCAG against both backgrounds.
-          DEFAULT: "var(--accent)",
+          // utility class. `--accent-rgb` is defined per-theme in index.css
+          // (space-separated RGB channels) so opacity modifiers like
+          // `bg-accent/10` keep working alongside `text-accent` / `bg-accent`.
+          DEFAULT: "rgb(var(--accent-rgb) / <alpha-value>)",
           dark: "#8E2A11",
           light: "#E55A28",
           50: "#FCEFE8",

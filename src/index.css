@@ -31,6 +31,9 @@
     --fg-muted: #5A5654;
     --line: #D4CDC6;
     --accent: #B33517;
+    /* Same value as --accent, but as space-separated RGB channels so
+       Tailwind opacity modifiers (e.g. `bg-accent/10`) can compose alpha. */
+    --accent-rgb: 179 53 23;
   }
   .dark {
     color-scheme: dark;
@@ -40,6 +43,7 @@
     --fg-muted: #B5AEA9;
     --line: #2A2724;
     --accent: #E55A28;
+    --accent-rgb: 229 90 40;
     /* Pair the lighter dark-mode accent with a near-black button label so
        the primary CTA still hits 4.5:1 contrast. */
     --btn-fg: #0B0A09;
