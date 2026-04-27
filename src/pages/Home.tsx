@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight } from "../components/Arrow";
 import Marquee from "../components/Marquee";
 import Magnetic from "../components/Magnetic";
 import Reveal from "../components/Reveal";
-import Tilt from "../components/Tilt";
 import Seo from "../components/Seo";
 import { projects } from "../data/projects";
 import { clients, testimonials } from "../data/clients";
@@ -72,9 +71,6 @@ function HeroCanvas() {
 
 function HeroParallax() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   return (
     <div ref={ref} className="relative">
@@ -115,29 +111,31 @@ function HeroParallax() {
             </Reveal>
           </div>
 
-          <motion.div style={{ y, scale }} className="lg:col-span-4 mt-10 lg:mt-0">
-            <Tilt intensity={5} className="relative">
-              <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:ml-auto rounded-sm overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)]">
-                <img
-                  src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75"
-                  srcSet="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=75 400w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75 600w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80 900w"
-                  sizes="(max-width: 768px) 80vw, 30vw"
-                  alt="Mariya Akter, portrait"
-                  width="900"
-                  height="1125"
-                  fetchPriority="high"
-                  decoding="async"
-                  className="w-full h-full object-cover grayscale-[10%]"
-                />
-                <div className="absolute -bottom-4 -left-4 hidden sm:block bg-app px-5 py-4 shadow-lg max-w-[15rem] border border-line">
-                  <p className="label">Studio Note</p>
-                  <p className="font-serif italic text-sm mt-1 leading-snug">
-                    "Design is the silent ambassador of your brand."
-                  </p>
-                </div>
+          {/* Hero portrait kept as a plain element — no framer-motion wrapper —
+             so the prerendered HTML hydrates without React re-styling the LCP
+             element on mount. The parallax scroll-effect was nice but it cost
+             ~2s of mobile LCP. */}
+          <div className="lg:col-span-4 mt-10 lg:mt-0">
+            <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:ml-auto rounded-sm overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)]">
+              <img
+                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75"
+                srcSet="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=75 400w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75 600w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80 900w"
+                sizes="(max-width: 768px) 80vw, 30vw"
+                alt="Mariya Akter, portrait"
+                width="900"
+                height="1125"
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-full object-cover grayscale-[10%]"
+              />
+              <div className="absolute -bottom-4 -left-4 hidden sm:block bg-app px-5 py-4 shadow-lg max-w-[15rem] border border-line">
+                <p className="label">Studio Note</p>
+                <p className="font-serif italic text-sm mt-1 leading-snug">
+                  "Design is the silent ambassador of your brand."
+                </p>
               </div>
-            </Tilt>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
         <div className="absolute -z-10 top-[20%] left-[-10%] w-[40vw] h-[40vw] rounded-full blob bg-accent/10" />

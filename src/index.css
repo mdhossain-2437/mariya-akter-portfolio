@@ -31,6 +31,9 @@
     --fg-muted: #5A5654;
     --line: #D4CDC6;
     --accent: #B33517;
+    /* Same value as --accent, but as space-separated RGB channels so
+       Tailwind opacity modifiers (e.g. `bg-accent/10`) can compose alpha. */
+    --accent-rgb: 179 53 23;
   }
   .dark {
     color-scheme: dark;
@@ -40,6 +43,10 @@
     --fg-muted: #B5AEA9;
     --line: #2A2724;
     --accent: #E55A28;
+    --accent-rgb: 229 90 40;
+    /* Pair the lighter dark-mode accent with a near-black button label so
+       the primary CTA still hits 4.5:1 contrast. */
+    --btn-fg: #0B0A09;
   }
   html {
     -webkit-font-smoothing: antialiased;
@@ -82,15 +89,19 @@
 
 @layer components {
   .label {
-    @apply uppercase tracking-widest2 text-[0.7rem] sm:text-xs font-medium text-accent;
+    @apply uppercase tracking-widest2 text-[0.7rem] sm:text-xs font-medium;
+    color: var(--accent);
   }
   .label-muted {
     @apply uppercase tracking-widest2 text-[0.7rem] sm:text-xs font-medium;
     color: var(--fg-muted);
   }
   .btn-primary {
-    @apply relative inline-flex items-center justify-center gap-2 bg-accent text-cream-100 px-6 py-3 rounded-full uppercase text-xs font-semibold tracking-widest2 transition-all duration-500;
+    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full uppercase text-xs font-semibold tracking-widest2 transition-all duration-500;
+    background: var(--accent);
+    color: var(--btn-fg, #FBF7F1);
   }
+
   .btn-primary:hover {
     @apply bg-accent-dark;
     transform: translateY(-1px);
@@ -322,4 +333,17 @@
     scroll-behavior: auto !important;
   }
   .blob, .text-shimmer, .marquee-track { animation: none !important; }
+}
+
+/* Override `text-cream-100` foreground when paired with `bg-accent` so the
+   dark-mode CTA passes WCAG 4.5:1. The dark-mode accent is intentionally
+   lighter (so `text-accent` stays readable on dark backgrounds), so paired
+   buttons need a near-black label instead of white. */
+.dark .bg-accent.text-cream-100,
+.dark .bg-accent .text-cream-100,
+.dark [class*="bg-accent"]:where(.text-cream-100, :has(> .text-cream-100)) {
+  color: var(--btn-fg);
+}
+.dark .text-cream-100.bg-accent {
+  color: var(--btn-fg);
 }

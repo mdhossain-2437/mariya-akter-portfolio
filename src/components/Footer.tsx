@@ -29,7 +29,7 @@ export default function Footer() {
           <Magnetic strength={0.25}>
             <Link
               to="/contact"
-              className="group inline-flex flex-col items-center justify-center w-40 h-40 md:w-52 md:h-52 rounded-full bg-accent text-cream-100 uppercase tracking-widest2 text-xs font-semibold relative overflow-hidden"
+              className="group inline-flex flex-col items-center justify-center w-40 h-40 md:w-52 md:h-52 rounded-full uppercase tracking-widest2 text-xs font-semibold relative overflow-hidden bg-[var(--accent)] text-[var(--btn-fg,#FBF7F1)]"
             >
               <span className="relative z-10 flex flex-col items-center gap-2">
                 <span>Start a project</span>
