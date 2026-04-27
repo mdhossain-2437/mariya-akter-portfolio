@@ -40,7 +40,11 @@ const { render } = await import(entryPath);
 // tags. This way `<link rel="canonical">`, alternates, etc. emitted by
 // Helmet get hoisted to <head> instead of being stranded in <body>.
 const STRIP_PRELOAD_RE = /<link\b[^>]*rel="preload"[^>]*\/?>/g;
-const HEAD_TAG_RE = /<(?:title|meta|link)\b[^>]*\/?>(?:<\/title>)?/g;
+// Match a complete <title>…</title> pair (with arbitrary inner text) OR a
+// self-closing / void <meta> / <link> tag. The previous regex only matched
+// the opening <title> (with optional immediate close), which left titles
+// containing content stranded as `Some text</title>` in the body.
+const HEAD_TAG_RE = /<title\b[^>]*>[^<]*<\/title>|<(?:meta|link)\b[^>]*\/?>/g;
 
 for (const url of routes) {
   const { html } = render(url);
