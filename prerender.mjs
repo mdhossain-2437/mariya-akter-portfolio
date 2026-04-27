@@ -35,8 +35,12 @@ const { render } = await import(entryPath);
 // during hydration. We also strip React 19's auto-emitted preload <link>s —
 // the template already has a hand-tuned image preload with correctly-cased
 // attributes, and React's camelCase clones are ignored by browsers anyway.
-const HEAD_TAG_RE = /<(?:title|meta)\b[^>]*\/?>(?:<\/title>)?/g;
+//
+// We strip preload links FIRST, then lift the remaining title / meta / link
+// tags. This way `<link rel="canonical">`, alternates, etc. emitted by
+// Helmet get hoisted to <head> instead of being stranded in <body>.
 const STRIP_PRELOAD_RE = /<link\b[^>]*rel="preload"[^>]*\/?>/g;
+const HEAD_TAG_RE = /<(?:title|meta|link)\b[^>]*\/?>(?:<\/title>)?/g;
 
 for (const url of routes) {
   const { html } = render(url);
@@ -53,20 +57,39 @@ for (const url of routes) {
     return "";
   });
 
-  // Deduplicate by element kind: only one <title>; for meta tags, last wins
-  // when they target the same name/property; same for canonical link.
+  // Pre-seed the dedup set with whatever tags the static template's <head>
+  // already ships. Helmet often re-emits the same title / canonical / OG
+  // tags that the template hand-codes, and we don't want duplicate
+  // canonicals or twin og:title nodes in the final head.
   const seen = new Set();
+  const headOriginal = (template.match(/<head>([\s\S]*?)<\/head>/) || [, ""])[1];
+  const HEAD_KEY_RE = /<(?:title|meta|link)\b[^>]*>/g;
+  for (const tag of headOriginal.match(HEAD_KEY_RE) || []) {
+    if (/^<title\b/i.test(tag)) {
+      seen.add("__title__");
+      continue;
+    }
+    const m = tag.match(/(?:name|property|rel)=["']([^"']+)["']/i);
+    if (!m) continue;
+    const elName = (tag.match(/^<(\w+)/) || [, "meta"])[1];
+    seen.add(`${elName}|${m[1]}`);
+  }
+
+  // Deduplicate the lifted tags by element kind: only one <title>; for meta
+  // tags last-wins when they target the same name/property; same for
+  // canonical / alternate links. We walk in reverse so later writes override
+  // earlier ones (matching React tree-walk order).
   const ordered = [];
-  let titleSeen = false;
   for (const t of [...liftedTags].reverse()) {
     if (/^<title\b/i.test(t)) {
-      if (titleSeen) continue;
-      titleSeen = true;
+      if (seen.has("__title__")) continue;
+      seen.add("__title__");
       ordered.push(t);
       continue;
     }
     const m = t.match(/(?:name|property|rel)=["']([^"']+)["']/i);
-    const key = m ? `${t.match(/^<(\w+)/)[1]}|${m[1]}` : t;
+    const elName = (t.match(/^<(\w+)/) || [, "meta"])[1];
+    const key = m ? `${elName}|${m[1]}` : t;
     if (seen.has(key)) continue;
     seen.add(key);
     ordered.push(t);
