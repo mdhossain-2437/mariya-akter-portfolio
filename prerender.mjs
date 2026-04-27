@@ -74,7 +74,15 @@ for (const url of routes) {
   ordered.reverse();
   const headInsert = ordered.join("\n    ");
 
-  let out = template.replace('<div id="root"></div>', `<div id="root">${cleanedHtml}</div>`);
+  // Stamp the root with the route this content was rendered for. Vercel's
+  // SPA rewrite serves dist/index.html for every path, so we need a runtime
+  // marker the client can compare against window.location.pathname before
+  // attempting to hydrate — otherwise React would try to reconcile e.g. the
+  // /about component tree against home-page DOM.
+  let out = template.replace(
+    '<div id="root"></div>',
+    `<div id="root" data-ssr-path="${url}">${cleanedHtml}</div>`,
+  );
 
   if (headInsert) {
     out = out.replace("</head>", `    ${headInsert}\n  </head>`);
@@ -84,6 +92,14 @@ for (const url of routes) {
   // prerendered, so a static visitor sees the right pixels at FCP and Chrome
   // can lock LCP without waiting for React to parse + execute. Once the user
   // touches/scrolls/clicks, we fetch the bundle and React takes over.
+  //
+  // IMPORTANT: Vercel's SPA rewrite serves this same HTML for every route.
+  // If the visitor lands on a non-prerendered path (e.g. /about), the lazy
+  // loader needs to fire IMMEDIATELY so React can clear the wrong markup
+  // and render the right page — otherwise the visitor would stare at home
+  // content until they happened to scroll or click. We detect that case in
+  // the loader by comparing window.location.pathname against the route
+  // stamped onto #root.
   const moduleScriptMatch = out.match(/<script type="module"[^>]*src="([^"]+)"[^>]*><\/script>/);
   if (moduleScriptMatch) {
     out = out.replace(moduleScriptMatch[0], "");
@@ -91,7 +107,7 @@ for (const url of routes) {
     // and would re-introduce the bandwidth contention we're trying to avoid.
     out = out.replace(/<link rel="modulepreload"[^>]*>\s*/g, "");
     const bundleSrc = moduleScriptMatch[1];
-    const lazyLoader = `<script>(function(){var loaded=false;function go(){if(loaded)return;loaded=true;["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.removeEventListener(ev,go,true);});var s=document.createElement('script');s.type='module';s.crossOrigin='anonymous';s.src=${JSON.stringify(bundleSrc)};document.head.appendChild(s);}["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.addEventListener(ev,go,{passive:true,capture:true,once:true});});if('requestIdleCallback' in window){requestIdleCallback(go,{timeout:8000});}else{setTimeout(go,4000);}})();</script>`;
+    const lazyLoader = `<script>(function(){var loaded=false;function go(){if(loaded)return;loaded=true;["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.removeEventListener(ev,go,true);});var s=document.createElement('script');s.type='module';s.crossOrigin='anonymous';s.src=${JSON.stringify(bundleSrc)};document.head.appendChild(s);}function load(){var root=document.getElementById('root');var ssrPath=root&&root.getAttribute('data-ssr-path');if(ssrPath&&ssrPath!==location.pathname){if(root)root.innerHTML='';go();return;}["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.addEventListener(ev,go,{passive:true,capture:true,once:true});});if('requestIdleCallback' in window){requestIdleCallback(go,{timeout:8000});}else{setTimeout(go,4000);}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',load);}else{load();}})();</script>`;
     out = out.replace("</head>", `    ${lazyLoader}\n  </head>`);
   }
 
