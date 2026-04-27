@@ -13,7 +13,13 @@ type Payload = {
 };
 
 const DESTINATION = process.env.CONTACT_DESTINATION || "misshossain2437@gmail.com";
-const FROM = process.env.CONTACT_FROM || "Mariya Akter Studio <onboarding@resend.dev>";
+// Default to the studio's own verified domain. Requires the matching SPF /
+// DKIM / Return-Path records to be live on Cloudflare DNS for mariyaakter.me
+// (Resend dashboard → Domains → Add → mariyaakter.me, then paste the records
+// into Cloudflare). Until verification flips green, override this via the
+// `CONTACT_FROM` env var on Vercel (e.g. `Mariya Akter <onboarding@resend.dev>`)
+// to keep delivery working.
+const FROM = process.env.CONTACT_FROM || "Mariya Akter <hello@mariyaakter.me>";
 const REPLY_TO_DOMAIN = "mariyaakter.me";
 
 function escape(value: string): string {

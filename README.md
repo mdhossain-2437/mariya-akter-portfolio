@@ -68,9 +68,26 @@ Set these in **Vercel → Project → Settings → Environment Variables** (all 
 | ---------------------- | :------: | ----------------------------------------------------------------- |
 | `RESEND_API_KEY`       | ✓        | Resend API key – [resend.com/api-keys](https://resend.com/api-keys) |
 | `CONTACT_DESTINATION`  |          | Override inbox. Defaults to `misshossain2437@gmail.com`.          |
-| `CONTACT_FROM`         |          | `Name <inbox@verified-domain>`. Defaults to `onboarding@resend.dev`. |
+| `CONTACT_FROM`         |          | `Name <inbox@verified-domain>`. Defaults to `Mariya Akter <hello@mariyaakter.me>`. |
 
-> Verify `mariyaakter.me` as a Resend sending domain to send `From: hello@mariyaakter.me` instead of the default sandbox sender.
+> The studio's own domain is the default sender. The address must be **verified on Resend** before delivery works — see "Resend sending domain (Cloudflare)" below.
+
+### Resend sending domain (Cloudflare)
+
+`hello@mariyaakter.me` is the default `From:` address on `/api/contact`. For Resend to actually deliver mail signed as `mariyaakter.me`, the matching SPF / DKIM / Return-Path records must be live on Cloudflare DNS:
+
+1. **Resend dashboard** → Domains → **Add Domain** → `mariyaakter.me` (region `us-east-1` is fine).
+2. Resend will show three or four records:
+   - `TXT` at `send` (SPF: `v=spf1 include:amazonses.com ~all`)
+   - `TXT` at `resend._domainkey` (DKIM, long base64 string)
+   - `MX` at `send` priority 10 (`feedback-smtp.us-east-1.amazonses.com`)
+   - `TXT` at `_dmarc` (optional, but recommended: `v=DMARC1; p=none;`)
+3. **Cloudflare → DNS → Records** for `mariyaakter.me`:
+   - Add each record exactly as Resend shows. **Disable the orange-cloud proxy** for the `MX` and `TXT` records (set "DNS only").
+4. Click **Verify DNS records** in the Resend dashboard. Verification can take 1–10 minutes.
+5. While verification is pending, override the env var on Vercel: `CONTACT_FROM=Mariya Akter <onboarding@resend.dev>`. Once verification flips green, remove that override (or set it to `Mariya Akter <hello@mariyaakter.me>` to be explicit).
+
+Cloudflare's Email Routing for **inbound** mail (`hello@mariyaakter.me` → `misshossain2437@gmail.com`) is independent and does not conflict with Resend's outbound MX records — Cloudflare uses a routing-specific `MX` at the apex while Resend's `MX` lives on the `send.` subdomain.
 
 ## Deploying to Vercel
 
