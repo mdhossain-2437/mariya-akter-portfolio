@@ -23,7 +23,10 @@ export default {
           200: "#D4CDC6",
         },
         accent: {
-          DEFAULT: "#B33717",
+          // Track the CSS variable so light/dark themes share the Tailwind
+          // utility class. `--accent` is defined per-theme in index.css and
+          // already passes WCAG against both backgrounds.
+          DEFAULT: "var(--accent)",
           dark: "#8E2A11",
           light: "#E55A28",
           50: "#FCEFE8",
