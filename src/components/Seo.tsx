@@ -19,7 +19,15 @@ const DEFAULT_DESC =
 // can rehydrate per-route titles cleanly once it takes over.
 export default function Seo({ title, description, image, path }: Props) {
 
-  const pageTitle = title ? `${title} — Mariya Akter` : "Mariya Akter — Portfolio";
+  // Avoid double-suffixing when a page already passes a self-contained
+  // title (e.g. Home: "Mariya Akter — Portfolio"). Match the same rule
+  // used by prerender.mjs so the static HTML and the hydrated Helmet
+  // output agree exactly — no flicker when React takes over.
+  const pageTitle = !title
+    ? "Mariya Akter — Portfolio"
+    : title.toLowerCase().includes("mariya akter")
+      ? title
+      : `${title} — Mariya Akter`;
   const desc = description ?? DEFAULT_DESC;
   const url = path ? `${SITE}${path}` : SITE;
   const img = image
