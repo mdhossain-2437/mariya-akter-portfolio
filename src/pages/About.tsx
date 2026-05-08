@@ -26,17 +26,27 @@ export default function About() {
       <section className="container-narrow pt-12 md:pt-20 pb-24 md:pb-32">
         <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-start">
           <div className="md:col-span-5 fade-up">
-            <div className="aspect-square overflow-hidden bg-ink-900 rounded-sm shadow-[0_30px_70px_-30px_rgba(0,0,0,0.45)]">
-              <img
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80"
-                alt="Mariya Akter"
-                loading="lazy"
-                decoding="async"
-                width="900"
-                height="1125"
-                className="w-full h-full object-cover grayscale"
-              />
-            </div>
+            <figure className="aspect-square overflow-hidden bg-ink-900 rounded-sm shadow-[0_30px_70px_-30px_rgba(0,0,0,0.45)]">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet="/images/mariya-akter-portrait-square-480.webp 480w, /images/mariya-akter-portrait-square-640.webp 640w, /images/mariya-akter-portrait-square-960.webp 960w, /images/mariya-akter-portrait-square-1280.webp 1280w"
+                  sizes="(max-width: 768px) 90vw, 40vw"
+                />
+                <img
+                  src="/images/mariya-akter-portrait-square-640.jpg"
+                  srcSet="/images/mariya-akter-portrait-square-480.jpg 480w, /images/mariya-akter-portrait-square-640.jpg 640w, /images/mariya-akter-portrait-square-960.jpg 960w, /images/mariya-akter-portrait-square-1280.jpg 1280w"
+                  sizes="(max-width: 768px) 90vw, 40vw"
+                  alt="Mariya Akter — multidisciplinary designer based in Dhaka, Bangladesh."
+                  loading="lazy"
+                  decoding="async"
+                  width="1254"
+                  height="1254"
+                  className="w-full h-full object-cover"
+                  itemProp="image"
+                />
+              </picture>
+            </figure>
           </div>
 
           <div className="md:col-span-7 fade-up-delay-1">

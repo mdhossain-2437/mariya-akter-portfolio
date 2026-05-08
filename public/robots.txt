@@ -2,6 +2,12 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
+# Google Image — explicitly allow indexing of the portrait + assets
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /og-cover.jpg
+Allow: /
+
 # AI crawlers — allow for discovery (portfolio is meant to be indexed)
 User-agent: GPTBot
 Allow: /

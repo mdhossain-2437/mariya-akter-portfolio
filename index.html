@@ -50,13 +50,11 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="manifest" href="/manifest.json" />
-    <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="dns-prefetch" href="https://images.unsplash.com" />
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75"
-      imagesrcset="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=75 400w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75 600w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80 900w"
+      href="/images/mariya-akter-portrait-tall-640.jpg"
+      imagesrcset="/images/mariya-akter-portrait-tall-480.jpg 480w, /images/mariya-akter-portrait-tall-640.jpg 640w, /images/mariya-akter-portrait-tall-960.jpg 960w, /images/mariya-akter-portrait-tall-1280.jpg 1280w"
       imagesizes="(max-width: 768px) 80vw, 30vw"
       fetchpriority="high"
     />
@@ -70,7 +68,19 @@
             "@id": "https://mariyaakter.me/#mariya",
             "name": "Mariya Akter",
             "url": "https://mariyaakter.me/",
-            "image": "https://mariyaakter.me/og-cover.jpg",
+            "image": {
+              "@type": "ImageObject",
+              "@id": "https://mariyaakter.me/#portrait",
+              "url": "https://mariyaakter.me/images/mariya-akter-portrait.jpg",
+              "contentUrl": "https://mariyaakter.me/images/mariya-akter-portrait.jpg",
+              "width": 1254,
+              "height": 1254,
+              "caption": "Mariya Akter — multidisciplinary designer (brand, fashion, digital) based in Dhaka.",
+              "creditText": "Mariya Akter Studio",
+              "creator": { "@id": "https://mariyaakter.me/#mariya" },
+              "copyrightNotice": "© Mariya Akter",
+              "license": "https://mariyaakter.me/"
+            },
             "jobTitle": "Multidisciplinary Designer & Creative Director",
             "description": "Multidisciplinary designer crafting intentional brand identities, fashion direction, and digital strategy.",
             "address": {
@@ -109,6 +119,7 @@
             "name": "Mariya Akter Studio",
             "url": "https://mariyaakter.me/",
             "image": "https://mariyaakter.me/og-cover.jpg",
+            "logo": "https://mariyaakter.me/images/mariya-akter-portrait-square-640.jpg",
             "founder": { "@id": "https://mariyaakter.me/#mariya" },
             "areaServed": "Worldwide",
             "priceRange": "$$$",
