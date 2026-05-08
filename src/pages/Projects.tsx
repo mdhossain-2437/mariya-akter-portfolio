@@ -3,6 +3,44 @@ import { useMemo, useState } from "react";
 import Seo from "../components/Seo";
 import Reveal from "../components/Reveal";
 import { projects } from "../data/projects";
+import { githubRepos, topLanguages } from "../data/githubRepos";
+
+const LANG_TINT: Record<string, string> = {
+  TypeScript: "#3178c6",
+  JavaScript: "#f7df1e",
+  Python: "#3572a5",
+  Rust: "#dea584",
+  Go: "#00ADD8",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  SCSS: "#c6538c",
+  Shell: "#89e051",
+  Java: "#b07219",
+  Kotlin: "#A97BFF",
+  Swift: "#F05138",
+  Dart: "#00B4AB",
+  Vue: "#41b883",
+  Svelte: "#ff3e00",
+  PHP: "#777BB4",
+  Ruby: "#701516",
+  C: "#555555",
+  "C++": "#f34b7d",
+  "C#": "#178600",
+};
+
+function langTint(lang: string): string {
+  return LANG_TINT[lang] || "#8a8680";
+}
+
+function relTime(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  const days = Math.floor(ms / 86400000);
+  if (days < 1) return "today";
+  if (days < 7) return `${days}d ago`;
+  if (days < 30) return `${Math.floor(days / 7)}w ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return `${Math.floor(days / 365)}y ago`;
+}
 
 function uniq<T>(arr: T[]) {
   return Array.from(new Set(arr));
@@ -128,7 +166,10 @@ export default function Projects() {
 
       {/* Grid */}
       {layout === "grid" ? (
-        <section className="container-wide mt-14 md:mt-20">
+        <section className="container-wide mt-14 md:mt-20" aria-labelledby="studio-book-heading">
+          <h2 id="studio-book-heading" className="sr-only">
+            Studio book — selected case studies
+          </h2>
           {filtered.length === 0 ? (
             <p className="text-center py-24 font-serif italic text-fg-muted">
               No projects match these filters.
@@ -170,7 +211,10 @@ export default function Projects() {
           )}
         </section>
       ) : (
-        <section className="container-narrow mt-14 md:mt-20">
+        <section className="container-narrow mt-14 md:mt-20" aria-labelledby="studio-book-list-heading">
+          <h2 id="studio-book-list-heading" className="sr-only">
+            Studio book — selected case studies (list view)
+          </h2>
           <ol className="border-t border-line">
             {filtered.map((p, i) => (
               <li key={p.slug} className="border-b border-line">
@@ -197,6 +241,122 @@ export default function Projects() {
               </li>
             ))}
           </ol>
+        </section>
+      )}
+
+      {/* GitHub build log */}
+      {githubRepos.length > 0 && (
+        <section className="container-wide mt-32 md:mt-40 pt-20 md:pt-28 border-t border-line">
+          <div className="grid md:grid-cols-12 gap-10 items-end mb-14 md:mb-20">
+            <div className="md:col-span-7">
+              <Reveal>
+                <p className="label">Build log · live from GitHub</p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="mt-4 font-serif text-fg text-[clamp(2rem,7vw,5rem)] leading-[1.05]">
+                  Every <em className="italic text-accent">repository</em>,
+                  shipped or in&nbsp;flight.
+                </h2>
+              </Reveal>
+            </div>
+            <div className="md:col-span-5">
+              <Reveal delay={0.15}>
+                <p className="text-fg-muted leading-relaxed">
+                  The studio's full code catalogue — pulled directly from{" "}
+                  <a
+                    href="https://github.com/mdhossain-2437"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-underline"
+                  >
+                    @mdhossain-2437
+                  </a>{" "}
+                  at build time. {githubRepos.length} repositories spanning{" "}
+                  React, Next.js, Node, and the occasional sketch in Python or
+                  Kotlin.
+                </p>
+              </Reveal>
+            </div>
+          </div>
+
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {githubRepos.map((r) => {
+              const langs = topLanguages(r, 3);
+              const tint = langTint(r.language || "");
+              return (
+                <li key={r.slug}>
+                  <Link
+                    to={`/projects/${r.slug}`}
+                    className="group flex h-full flex-col rounded-[6px] border border-line bg-app-elev/40 p-6 transition-colors hover:border-accent hover:bg-app-elev"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-serif text-xl text-fg leading-snug group-hover:text-accent transition-colors">
+                        {r.name}
+                      </h3>
+                      {r.private && (
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-fg-muted border border-line rounded-full px-2 py-0.5">
+                          Private
+                        </span>
+                      )}
+                      {r.archived && (
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-fg-muted border border-line rounded-full px-2 py-0.5">
+                          Archived
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="mt-3 text-sm text-fg-muted leading-relaxed flex-grow">
+                      {r.description ||
+                        r.readme_excerpt.slice(0, 140) ||
+                        "No description provided."}
+                    </p>
+
+                    {langs.length > 0 && (
+                      <div
+                        className="mt-5 flex h-1 overflow-hidden rounded-full bg-line/40"
+                        role="img"
+                        aria-label={`Language breakdown: ${langs
+                          .map(
+                            ([lang, pct]) =>
+                              `${lang} ${(pct * 100).toFixed(0)}%`,
+                          )
+                          .join(", ")}`}
+                      >
+                        {langs.map(([lang, pct]) => (
+                          <span
+                            key={lang}
+                            style={{
+                              width: `${(pct * 100).toFixed(1)}%`,
+                              background: langTint(lang),
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-4 flex items-center gap-4 text-xs uppercase tracking-[0.18em] text-fg-muted">
+                      {r.language && (
+                        <span className="inline-flex items-center gap-1.5">
+                          <span
+                            className="w-2 h-2 rounded-full"
+                            style={{ background: tint }}
+                            aria-hidden="true"
+                          />
+                          {r.language}
+                        </span>
+                      )}
+                      {r.stargazers_count > 0 && (
+                        <span aria-label={`${r.stargazers_count} stars`}>
+                          ★ {r.stargazers_count}
+                        </span>
+                      )}
+                      <span className="ml-auto">{relTime(r.pushed_at)}</span>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 

@@ -22,9 +22,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
           <div className="max-w-3xl">
             <div className="label">— Available Q3 / {year} —</div>
-            <h3 className="heading-display text-[12vw] md:text-[8vw] mt-6">
+            <h2 className="heading-display text-[12vw] md:text-[8vw] mt-6">
               Let's craft <em className="italic font-light text-accent">something</em> exceptional.
-            </h3>
+            </h2>
           </div>
           <Magnetic strength={0.25}>
             <Link
