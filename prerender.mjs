@@ -1,10 +1,30 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { build as esbuild } from "esbuild";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(__dirname, "dist");
 const ssrDir = resolve(__dirname, "dist-ssr");
+
+// Bundle a TS data module into a temp JS file, import it, return the
+// named exports. Used to load src/data/journal.ts and src/data/projects.ts
+// from this .mjs script without baking a long-lived extractor build step.
+async function loadTsModule(srcRelPath) {
+  const absIn = resolve(__dirname, srcRelPath);
+  const absOut = resolve(__dirname, ".prerender-cache", srcRelPath.replace(/\.ts$/, ".mjs").replace(/\//g, "_"));
+  mkdirSync(dirname(absOut), { recursive: true });
+  await esbuild({
+    entryPoints: [absIn],
+    bundle: false,
+    format: "esm",
+    platform: "node",
+    target: "node20",
+    outfile: absOut,
+    logLevel: "silent",
+  });
+  return await import(pathToFileURL(absOut).href);
+}
 
 // Per-route SEO map. Mirrors the props on each page's <Seo> component.
 //
@@ -132,6 +152,45 @@ const routeSeo = {
   },
 };
 
+// Pull dynamic slugs from the data modules and mint route entries on
+// top of the static map. Each case study, journal entry, and GitHub
+// repo gets its own dist/<path>/index.html with route-specific meta so
+// crawlers and social unfurls see the right preview for every page.
+const { journalPosts } = await loadTsModule("src/data/journal.ts");
+const { projects } = await loadTsModule("src/data/projects.ts");
+
+const githubRepos = JSON.parse(
+  readFileSync(resolve(__dirname, "src/data/github-repos.json"), "utf8"),
+);
+
+for (const post of journalPosts) {
+  routeSeo[`/journal/${post.slug}`] = {
+    title: post.title,
+    description: post.excerpt,
+    image: post.cover,
+  };
+}
+
+for (const project of projects) {
+  routeSeo[`/work/${project.slug}`] = {
+    title: project.title,
+    description: project.blurb || project.description || `${project.title} — a ${project.category} project by Mariya Akter.`,
+    image: project.cover,
+  };
+}
+
+for (const repo of githubRepos) {
+  const slug = repo.slug || repo.name;
+  if (!slug) continue;
+  const desc = repo.description
+    ? repo.description
+    : `${repo.name} — ${repo.language || "source"} project by Mariya Akter.`;
+  routeSeo[`/projects/${slug}`] = {
+    title: repo.name,
+    description: desc,
+  };
+}
+
 const routes = Object.keys(routeSeo);
 
 // Escape attribute and HTML-text values so injected SEO can't break
@@ -139,12 +198,22 @@ const routes = Object.keys(routeSeo);
 const escAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 const escText = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+// External image URLs (Unsplash) aren't appropriate as <meta property="og:image">
+// because LinkedIn / X / FB need a fixed-size hosted image. Fall back to the
+// self-hosted OG cover unless the image is one we serve from the same origin.
+const safeOgImage = (maybeImg) => {
+  if (!maybeImg) return DEFAULT_IMAGE;
+  if (maybeImg.startsWith("/")) return `${SITE}${maybeImg}`;
+  if (maybeImg.startsWith(`${SITE}/`)) return maybeImg;
+  return DEFAULT_IMAGE;
+};
+
 const buildHelmetTags = (path) => {
   const seo = routeSeo[path] || {};
   const title = FORMAT_TITLE(seo.title);
   const desc = seo.description || DEFAULT_DESC;
   const url = `${SITE}${path === "/" ? "/" : path}`;
-  const img = DEFAULT_IMAGE;
+  const img = safeOgImage(seo.image);
   return [
     `<title>${escText(title)}</title>`,
     `<meta name="description" content="${escAttr(desc)}" />`,
@@ -323,3 +392,78 @@ for (const url of routes) {
 if (!existsSync(indexHtmlPath)) {
   copyFileSync(join(distDir, "index.html"), indexHtmlPath);
 }
+
+// Regenerate sitemap.xml from the full route list so every page we
+// actually prerender is discoverable by search engines. Static routes
+// and dynamic slug routes all make it in. Home + About keep their
+// <image:image> entries for the portrait.
+const today = new Date().toISOString().slice(0, 10);
+const priorityFor = (path) => {
+  if (path === "/") return "1.0";
+  if (/^\/(about|work|projects|lookbook|services|contact)$/.test(path)) return "0.9";
+  if (/^\/(process|capabilities|journal|pricing)$/.test(path)) return "0.8";
+  if (/^\/(clients|press|now|faq|archive|expertise)$/.test(path)) return "0.7";
+  if (/^\/(privacy|terms)$/.test(path)) return "0.3";
+  if (path.startsWith("/work/") || path.startsWith("/journal/")) return "0.7";
+  if (path.startsWith("/projects/")) return "0.5";
+  return "0.6";
+};
+const changefreqFor = (path) => {
+  if (path === "/") return "monthly";
+  if (path === "/projects" || path === "/journal" || path === "/now") return "weekly";
+  if (/^\/(privacy|terms)$/.test(path)) return "yearly";
+  return "monthly";
+};
+const extraImage = (path) => {
+  if (path === "/") {
+    return [
+      `    <image:image>`,
+      `      <image:loc>${SITE}/images/mariya-akter-portrait.jpg</image:loc>`,
+      `      <image:title>Mariya Akter — Multidisciplinary Designer</image:title>`,
+      `      <image:caption>Mariya Akter, multidisciplinary designer based in Dhaka, Bangladesh. Brand identity, fashion direction, and digital strategy.</image:caption>`,
+      `      <image:license>${SITE}/</image:license>`,
+      `    </image:image>`,
+      `    <image:image>`,
+      `      <image:loc>${SITE}/og-cover.jpg</image:loc>`,
+      `      <image:title>Mariya Akter — Portfolio cover</image:title>`,
+      `      <image:caption>Mariya Akter — multidisciplinary designer. Studio in Dhaka, clients worldwide.</image:caption>`,
+      `    </image:image>`,
+    ].join("\n");
+  }
+  if (path === "/about") {
+    return [
+      `    <image:image>`,
+      `      <image:loc>${SITE}/images/mariya-akter-portrait.jpg</image:loc>`,
+      `      <image:title>Mariya Akter — Studio portrait</image:title>`,
+      `      <image:caption>Mariya Akter, founder and creative director, in studio.</image:caption>`,
+      `    </image:image>`,
+    ].join("\n");
+  }
+  return "";
+};
+
+const sitemapEntries = routes.map((path) => {
+  const loc = `${SITE}${path === "/" ? "/" : path}`;
+  const image = extraImage(path);
+  return [
+    `  <url>`,
+    `    <loc>${loc}</loc>`,
+    `    <lastmod>${today}</lastmod>`,
+    `    <changefreq>${changefreqFor(path)}</changefreq>`,
+    `    <priority>${priorityFor(path)}</priority>`,
+    image,
+    `  </url>`,
+  ].filter(Boolean).join("\n");
+}).join("\n");
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${sitemapEntries}
+</urlset>
+`;
+
+writeFileSync(join(distDir, "sitemap.xml"), sitemap);
+console.log(`generated sitemap.xml with ${routes.length} entries`);
