@@ -201,6 +201,7 @@ export default function CommandPalette({ onToggleTheme }: { onToggleTheme: () =>
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search pages, actions…"
+                aria-label="Search pages and actions"
                 className="flex-1 bg-transparent outline-none text-sm placeholder:text-fg-muted"
               />
               <kbd className="text-[10px] uppercase tracking-widest text-fg-muted">Esc</kbd>

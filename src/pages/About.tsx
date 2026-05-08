@@ -108,8 +108,10 @@ export default function About() {
             >
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <label className="label-muted block">Your Name</label>
+                  <label htmlFor="about-form-name" className="label-muted block">Your Name</label>
                   <input
+                    id="about-form-name"
+                    name="name"
                     required
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -118,8 +120,10 @@ export default function About() {
                   />
                 </div>
                 <div>
-                  <label className="label-muted block">Email Address</label>
+                  <label htmlFor="about-form-email" className="label-muted block">Email Address</label>
                   <input
+                    id="about-form-email"
+                    name="email"
                     type="email"
                     required
                     value={form.email}
@@ -131,8 +135,10 @@ export default function About() {
               </div>
 
               <div className="mt-8">
-                <label className="label-muted block">Interested In</label>
+                <label htmlFor="about-form-interest" className="label-muted block">Interested In</label>
                 <select
+                  id="about-form-interest"
+                  name="interest"
                   value={form.interest}
                   onChange={(e) => setForm({ ...form, interest: e.target.value })}
                   className="mt-2 w-full bg-transparent border-b border-line focus:border-accent outline-none py-2 appearance-none text-fg"
@@ -146,8 +152,10 @@ export default function About() {
               </div>
 
               <div className="mt-8">
-                <label className="label-muted block">Message</label>
+                <label htmlFor="about-form-message" className="label-muted block">Message</label>
                 <textarea
+                  id="about-form-message"
+                  name="message"
                   rows={4}
                   required
                   value={form.message}

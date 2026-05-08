@@ -217,8 +217,10 @@ export default function Contact() {
                         })}
                       </ul>
                       <div className="mt-8">
-                        <label className="label-muted block">Approximate budget (optional)</label>
+                        <label htmlFor="contact-budget" className="label-muted block">Approximate budget (optional)</label>
                         <input
+                          id="contact-budget"
+                          name="budget"
                           value={budget}
                           onChange={(e) => setBudget(e.target.value)}
                           placeholder="e.g. $15k or open"
@@ -250,8 +252,10 @@ export default function Contact() {
                         ))}
                       </ul>
                       <div className="mt-8">
-                        <label className="label-muted block">The narrative</label>
+                        <label htmlFor="contact-narrative" className="label-muted block">The narrative</label>
                         <textarea
+                          id="contact-narrative"
+                          name="narrative"
                           rows={5}
                           value={narrative}
                           onChange={(e) => setNarrative(e.target.value)}
@@ -268,8 +272,10 @@ export default function Contact() {
                       <h2 className="font-serif text-3xl mt-3">Who is sending this?</h2>
                       <div className="mt-6 grid sm:grid-cols-2 gap-6">
                         <div>
-                          <label className="label-muted block">Full name</label>
+                          <label htmlFor="contact-name" className="label-muted block">Full name</label>
                           <input
+                            id="contact-name"
+                            name="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Your name"
@@ -277,8 +283,10 @@ export default function Contact() {
                           />
                         </div>
                         <div>
-                          <label className="label-muted block">Email</label>
+                          <label htmlFor="contact-email" className="label-muted block">Email</label>
                           <input
+                            id="contact-email"
+                            name="email"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -287,8 +295,10 @@ export default function Contact() {
                           />
                         </div>
                         <div className="sm:col-span-2">
-                          <label className="label-muted block">Company / studio (optional)</label>
+                          <label htmlFor="contact-company" className="label-muted block">Company / studio (optional)</label>
                           <input
+                            id="contact-company"
+                            name="company"
                             value={company}
                             onChange={(e) => setCompany(e.target.value)}
                             placeholder="Maison X"
