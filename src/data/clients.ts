@@ -20,7 +20,7 @@ export const testimonials = [
     quote:
       "Mariya doesn't just design. She authors a worldview. Our launch sold out in 72 hours and the press called the visual system 'aestheticly disciplined and emotionally rich'.",
     image:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80",
   },
   {
     name: "Hiroshi Tanaka",

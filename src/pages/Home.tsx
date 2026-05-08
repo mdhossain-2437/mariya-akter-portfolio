@@ -116,25 +116,36 @@ function HeroParallax() {
              element on mount. The parallax scroll-effect was nice but it cost
              ~2s of mobile LCP. */}
           <div className="lg:col-span-4 mt-10 lg:mt-0">
-            <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:ml-auto rounded-sm overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)]">
-              <img
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75"
-                srcSet="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=75 400w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=75 600w, https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=900&q=80 900w"
-                sizes="(max-width: 768px) 80vw, 30vw"
-                alt="Mariya Akter, portrait"
-                width="900"
-                height="1125"
-                fetchPriority="high"
-                decoding="async"
-                className="w-full h-full object-cover grayscale-[10%]"
-              />
+            <figure className="relative aspect-[4/5] w-full max-w-md mx-auto lg:ml-auto rounded-sm overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)]">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet="/images/mariya-akter-portrait-tall-480.webp 480w, /images/mariya-akter-portrait-tall-640.webp 640w, /images/mariya-akter-portrait-tall-960.webp 960w, /images/mariya-akter-portrait-tall-1280.webp 1280w"
+                  sizes="(max-width: 768px) 80vw, 30vw"
+                />
+                <img
+                  src="/images/mariya-akter-portrait-tall-640.jpg"
+                  srcSet="/images/mariya-akter-portrait-tall-480.jpg 480w, /images/mariya-akter-portrait-tall-640.jpg 640w, /images/mariya-akter-portrait-tall-960.jpg 960w, /images/mariya-akter-portrait-tall-1280.jpg 1280w"
+                  sizes="(max-width: 768px) 80vw, 30vw"
+                  alt="Mariya Akter — multidisciplinary designer (brand, fashion, digital) based in Dhaka, Bangladesh."
+                  width="1003"
+                  height="1254"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                  itemProp="image"
+                />
+              </picture>
+              <figcaption className="sr-only">
+                Mariya Akter, multidisciplinary designer based in Dhaka.
+              </figcaption>
               <div className="absolute -bottom-4 -left-4 hidden sm:block bg-app px-5 py-4 shadow-lg max-w-[15rem] border border-line">
                 <p className="label">Studio Note</p>
                 <p className="font-serif italic text-sm mt-1 leading-snug">
                   "Design is the silent ambassador of your brand."
                 </p>
               </div>
-            </div>
+            </figure>
           </div>
         </div>
 
