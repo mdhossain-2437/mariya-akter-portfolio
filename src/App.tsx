@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
 import SkipLink from "./components/SkipLink";
-import Seo from "./components/Seo";
 
 // Non-critical UI — split out of the initial bundle so mobile LCP doesn't wait
 // for framer-motion/lenis/fuse to download + parse. They mount ~idle after
@@ -44,6 +43,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Capabilities = lazy(() => import("./pages/Capabilities"));
 const Projects = lazy(() => import("./pages/Projects"));
+const RepoDetail = lazy(() => import("./pages/RepoDetail"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -75,7 +75,6 @@ function AppRoutes() {
   const ambientReady = useAfterPaint();
   return (
     <>
-      <Seo />
       <SkipLink />
       <ScrollToTop />
       <Header />
@@ -86,6 +85,7 @@ function AppRoutes() {
                 <Route path="/" element={<Home />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/projects" element={<Projects />} />
+                <Route path="/projects/:slug" element={<RepoDetail />} />
                 <Route path="/work/:slug" element={<CaseStudy />} />
                 <Route path="/lookbook" element={<Lookbook />} />
                 <Route path="/archive" element={<Archive />} />

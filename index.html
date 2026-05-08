@@ -28,25 +28,26 @@
     />
     <meta name="author" content="Mariya Akter" />
     <meta name="keywords" content="Mariya Akter, multidisciplinary designer, brand identity, fashion direction, creative director, editorial design, Dhaka designer, portfolio" />
-    <link rel="canonical" href="https://mariyaakter.me/" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
+    <!-- og:title / og:description / og:image are injected per-route by
+         <Seo /> via react-helmet-async so they reflect the current page,
+         not the prerendered home defaults. og:site_name and og:type are
+         constant across the whole site so they live here. canonical and
+         og:url are also per-route and intentionally omitted from the
+         static template (otherwise the prerendered home values would
+         leak onto every non-/ route via Vercel's SPA rewrite). -->
     <meta property="og:site_name" content="Mariya Akter" />
-    <meta property="og:title" content="Mariya Akter — Multidisciplinary Designer" />
-    <meta property="og:description" content="Brand identities, fashion direction, and editorial digital experiences for discerning studios worldwide." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://mariyaakter.me/" />
-    <meta property="og:image" content="https://mariyaakter.me/og-cover.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content="Mariya Akter — Multidisciplinary Designer" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter card values (card type, title, description, image) are also
+         emitted per-route by <Seo /> so they stay in sync with og:*. -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Mariya Akter — Multidisciplinary Designer" />
-    <meta name="twitter:description" content="Brand identities, fashion direction, and editorial digital experiences." />
-    <meta name="twitter:image" content="https://mariyaakter.me/og-cover.jpg" />
 
     <link rel="manifest" href="/manifest.json" />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -123,6 +124,64 @@
           }
         ]
       }
+    </script>
+
+    <!-- Synchronous canonical/og:url injection for SPA routes that aren't
+         prerendered. Runs at end-of-head so any prerendered Helmet tags
+         already exist in the DOM and we don't double-inject. Without
+         this, Lighthouse audits non-prerendered routes before
+         react-helmet-async has a chance to mount and reports "no
+         canonical". -->
+    <script>
+      (function () {
+        function fix() {
+          try {
+            var path = location.pathname.replace(/\/+$/, "") || "/";
+            var url = "https://mariyaakter.me" + path;
+            // Strip prerendered canonical/og:url tags that don't match the
+            // current route. The prerendered HTML is served for every SPA
+            // route via Vercel rewrites, so on non-/ routes the baked-in
+            // canonical points at /. Lighthouse flags that as "Multiple
+            // conflicting URLs" against the canonical react-helmet-async
+            // injects post-hydration. Runs on DOMContentLoaded so the
+            // prerender.mjs-injected Helmet tags (which sit AFTER this
+            // script in the source) are already in the DOM.
+            document
+              .querySelectorAll('link[rel="canonical"]')
+              .forEach(function (el) {
+                if (el.href !== url && el.parentNode)
+                  el.parentNode.removeChild(el);
+              });
+            document
+              .querySelectorAll('meta[property="og:url"]')
+              .forEach(function (el) {
+                if (el.getAttribute("content") !== url && el.parentNode)
+                  el.parentNode.removeChild(el);
+              });
+            if (!document.querySelector('link[rel="canonical"]')) {
+              var c = document.createElement("link");
+              c.rel = "canonical";
+              c.setAttribute("data-baseline", "1");
+              c.href = url;
+              document.head.appendChild(c);
+            }
+            if (!document.querySelector('meta[property="og:url"]')) {
+              var o = document.createElement("meta");
+              o.setAttribute("property", "og:url");
+              o.setAttribute("data-baseline", "1");
+              o.content = url;
+              document.head.appendChild(o);
+            }
+          } catch (e) {
+            /* noop */
+          }
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", fix, { once: true });
+        } else {
+          fix();
+        }
+      })();
     </script>
   </head>
   <body>

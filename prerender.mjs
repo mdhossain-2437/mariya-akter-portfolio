@@ -54,9 +54,17 @@ for (const url of routes) {
   // attributes.
   let stripped = html.replace(STRIP_PRELOAD_RE, "");
   // Pull metadata-style tags (title/meta) out of the rendered React tree so
-  // they live in the head where the browser expects them.
+  // they live in the head where the browser expects them. We *intentionally
+  // drop* per-route canonical and og:url — Vercel's SPA fallback serves this
+  // same prerender for every path, so route-specific URLs would create
+  // "Multiple conflicting URLs" canonicals on non-/ routes. The baseline
+  // injection script in index.html supplies a path-aware canonical for
+  // pre-hydration audits, and Helmet re-adds the route-correct one once
+  // React hydrates.
   const liftedTags = [];
   const cleanedHtml = stripped.replace(HEAD_TAG_RE, (match) => {
+    if (/^<link\b[^>]*rel=["']canonical["']/i.test(match)) return "";
+    if (/^<meta\b[^>]*property=["']og:url["']/i.test(match)) return "";
     liftedTags.push(match);
     return "";
   });

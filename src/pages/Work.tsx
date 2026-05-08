@@ -34,6 +34,7 @@ export default function Work() {
           </div>
         </div>
 
+        <h2 className="sr-only">Featured projects</h2>
         <div className="grid md:grid-cols-12 gap-8 md:gap-x-10 md:gap-y-24">
           {GRID.slice(0, 4).map((g, i) => {
             const p = lookup[g.slug];
