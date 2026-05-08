@@ -140,7 +140,10 @@ export default function Journal() {
             }}
             className="mt-8 max-w-md mx-auto"
           >
+            <label htmlFor="journal-subscribe-email" className="sr-only">Email address for journal subscription</label>
             <input
+              id="journal-subscribe-email"
+              name="email"
               type="email"
               required
               value={email}
