@@ -267,7 +267,7 @@ const STRIP_PRELOAD_RE = /<link\b[^>]*rel="preload"[^>]*\/?>/g;
 const HEAD_TAG_RE = /<title\b[^>]*>[^<]*<\/title>|<(?:meta|link)\b[^>]*\/?>/g;
 
 for (const url of routes) {
-  const { html } = render(url);
+  const { html } = await render(url);
 
   // Strip duplicated preload links emitted by React 19's metadata hoisting —
   // the static template already has the right one with correctly-cased
