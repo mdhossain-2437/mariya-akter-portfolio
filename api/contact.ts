@@ -12,6 +12,42 @@ type Payload = {
   narrative?: string;
 };
 
+type AntiSpam = {
+  /** Honeypot. Real users never see this field; bots fill everything. */
+  _hp?: string;
+  /** Client-recorded ms timestamp when the form opened. Submissions
+   *  faster than `MIN_FILL_MS` after open are almost always bots. */
+  _t?: number;
+};
+
+/** In-memory rate limit. Vercel serverless reuses instances within a region
+ *  for several minutes, which is enough to throttle a noisy IP without
+ *  pulling in a KV / Redis dependency. Cleared on cold start (acceptable). */
+const recentByIp = new Map<string, number[]>();
+const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour rolling window
+const RATE_MAX = 5; // max submissions per IP per window
+const MIN_FILL_MS = 1500; // any submit faster than this is a bot
+
+function clientIp(req: VercelRequest): string {
+  const xff = req.headers["x-forwarded-for"];
+  if (typeof xff === "string" && xff.length) return xff.split(",")[0].trim();
+  if (Array.isArray(xff) && xff.length) return xff[0].split(",")[0].trim();
+  return (req.socket && req.socket.remoteAddress) || "unknown";
+}
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const cutoff = now - RATE_WINDOW_MS;
+  const list = (recentByIp.get(ip) ?? []).filter((t) => t > cutoff);
+  if (list.length >= RATE_MAX) {
+    recentByIp.set(ip, list);
+    return true;
+  }
+  list.push(now);
+  recentByIp.set(ip, list);
+  return false;
+}
+
 const DESTINATION = process.env.CONTACT_DESTINATION || "misshossain2437@gmail.com";
 // Default to the studio's own verified domain. Requires the matching SPF /
 // DKIM / Return-Path records to be live on Cloudflare DNS for mariyaakter.me
@@ -96,11 +132,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
   }
 
-  const body = (req.body ?? {}) as Payload;
+  const body = (req.body ?? {}) as Payload & AntiSpam;
+
+  // Honeypot — bots fill every visible-looking input. We never render
+  // _hp in the UI, so any non-empty value is a bot.
+  if (typeof body._hp === "string" && body._hp.trim().length > 0) {
+    return res.status(200).json({ ok: true, id: null }); // pretend success
+  }
+
+  // Time-to-fill — humans take more than ~1.5s to read and fill the form.
+  // Bots POST instantly. Tolerate a missing _t for backwards compat.
+  if (typeof body._t === "number" && Number.isFinite(body._t)) {
+    const elapsed = Date.now() - body._t;
+    if (elapsed >= 0 && elapsed < MIN_FILL_MS) {
+      return res.status(200).json({ ok: true, id: null });
+    }
+  }
+
+  // Per-IP rate limit — soft throttle so a single source can't flood the
+  // inbox. Returns 429 with a friendly message; client can show "please
+  // try again later".
+  const ip = clientIp(req);
+  if (rateLimited(ip)) {
+    return res.status(429).json({ ok: false, error: "Too many submissions. Please try again later." });
+  }
+
   const name = (body.name ?? "").toString().trim();
   const email = (body.email ?? "").toString().trim();
   if (!name) return res.status(400).json({ ok: false, error: "Name is required." });
   if (!validEmail(email)) return res.status(400).json({ ok: false, error: "A valid email is required." });
+
+  // Length guards — keep messages reasonable, drop obvious spam payloads.
+  if (name.length > 200 || email.length > 200) {
+    return res.status(400).json({ ok: false, error: "Submission is too long." });
+  }
+  if ((body.narrative ?? "").toString().length > 5000) {
+    return res.status(400).json({ ok: false, error: "Narrative is too long." });
+  }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {

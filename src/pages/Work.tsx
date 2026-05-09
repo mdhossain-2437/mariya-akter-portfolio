@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import { projects } from "../data/projects";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 
 const GRID = [
   { slug: "the-weavers-paradox", aspect: "aspect-[3/4]", span: "md:col-span-7" },
@@ -47,7 +48,9 @@ export default function Work() {
               >
                 <div className={`overflow-hidden bg-ink-900 ${g.aspect}`}>
                   <img
-                    src={p.cover}
+                    src={unsplashSized(p.cover, 1000)}
+                    srcSet={unsplashSrcSet(p.cover, [500, 800, 1000, 1400])}
+                    sizes="(max-width: 768px) 90vw, (max-width: 1280px) 50vw, 40vw"
                     alt={p.title}
                     loading={i === 0 ? "eager" : "lazy"}
                     fetchPriority={i === 0 ? "high" : "auto"}
@@ -75,7 +78,9 @@ export default function Work() {
           <Link to={`/work/${featured.slug}`} className="group block">
             <div className="relative aspect-[16/9] overflow-hidden bg-ink-900">
               <img
-                src={featured.cover}
+                src={unsplashSized(featured.cover, 1400)}
+                srcSet={unsplashSrcSet(featured.cover, [600, 900, 1200, 1600])}
+                sizes="(max-width: 1280px) 95vw, 1280px"
                 alt={featured.title}
                 loading="lazy"
                 decoding="async"

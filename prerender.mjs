@@ -349,23 +349,41 @@ for (const url of routes) {
     /<head>([\s\S]*?)<\/head>/,
     `<head>${headOriginal}${appended.length ? "\n    " + appended.join("\n    ") + "\n  " : ""}</head>`,
   );
+  // Shell-only pages render header + footer + an empty Suspense slot
+  // (where the lazy page would mount). That's ~12 kB of HTML. The home
+  // page renders the full tree and is closer to ~39 kB. Any route below
+  // ~20 kB is treated as shell-only and gets eager hydration so visitors
+  // don't sit on a near-blank page until they interact.
+  const isShellOnly = cleanedHtml.length < 20000;
+
+  const rootAttrs = isShellOnly
+    ? `data-ssr-path="${url}" data-ssr-shell="1"`
+    : `data-ssr-path="${url}"`;
   out = out.replace(
     '<div id="root"></div>',
-    `<div id="root" data-ssr-path="${url}">${cleanedHtml}</div>`,
+    `<div id="root" ${rootAttrs}>${cleanedHtml}</div>`,
   );
 
-  // Defer the main bundle load until the first user signal. The page is fully
-  // prerendered, so a static visitor sees the right pixels at FCP and Chrome
-  // can lock LCP without waiting for React to parse + execute. Once the user
-  // touches/scrolls/clicks, we fetch the bundle and React takes over.
+  // Defer the main bundle load until the first user signal — but only when
+  // the SSR produced real content for this route. The home page is fully
+  // prerendered (React renders the actual tree), so a static visitor sees
+  // the right pixels at FCP and Chrome can lock LCP without waiting for
+  // React to parse + execute. Once the user touches/scrolls/clicks, we
+  // fetch the bundle and React takes over.
+  //
+  // For lazy-loaded routes (every non-/ route), SSR resolves Suspense's
+  // fallback — the rendered body is just an empty shell. Deferring
+  // hydration there means the visitor sees a near-blank page until they
+  // interact, AND any "below the fold" element (e.g. the footer) shifts
+  // dramatically when React finally renders the real content, blowing
+  // up CLS. So for shell-only routes we hydrate immediately on idle and
+  // skip the interaction wait.
   //
   // IMPORTANT: Vercel's SPA rewrite serves this same HTML for every route.
-  // If the visitor lands on a non-prerendered path (e.g. /about), the lazy
-  // loader needs to fire IMMEDIATELY so React can clear the wrong markup
-  // and render the right page — otherwise the visitor would stare at home
-  // content until they happened to scroll or click. We detect that case in
-  // the loader by comparing window.location.pathname against the route
-  // stamped onto #root.
+  // If the visitor lands on a non-prerendered path the loader needs to
+  // hydrate IMMEDIATELY so React can clear the wrong markup and render
+  // the right page — we detect that case by comparing the URL against
+  // the route stamped onto #root.
   const moduleScriptMatch = out.match(/<script type="module"[^>]*src="([^"]+)"[^>]*><\/script>/);
   if (moduleScriptMatch) {
     out = out.replace(moduleScriptMatch[0], "");
@@ -373,8 +391,20 @@ for (const url of routes) {
     // and would re-introduce the bandwidth contention we're trying to avoid.
     out = out.replace(/<link rel="modulepreload"[^>]*>\s*/g, "");
     const bundleSrc = moduleScriptMatch[1];
-    const lazyLoader = `<script>(function(){var loaded=false;function go(){if(loaded)return;loaded=true;["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.removeEventListener(ev,go,true);});var s=document.createElement('script');s.type='module';s.crossOrigin='anonymous';s.src=${JSON.stringify(bundleSrc)};document.head.appendChild(s);}function load(){var root=document.getElementById('root');var ssrPath=root&&root.getAttribute('data-ssr-path');if(ssrPath&&ssrPath!==location.pathname){if(root)root.innerHTML='';go();return;}["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.addEventListener(ev,go,{passive:true,capture:true,once:true});});if('requestIdleCallback' in window){requestIdleCallback(go,{timeout:8000});}else{setTimeout(go,4000);}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',load);}else{load();}})();</script>`;
-    out = out.replace("</head>", `    ${lazyLoader}\n  </head>`);
+
+    // Eager loader: wait one rAF (so initial paint of the shell happens),
+    // then load the bundle. Used for shell-only routes so React fills in
+    // content before the visitor sees a blank page.
+    const eagerLoader = `<script>(function(){var s=document.createElement('script');s.type='module';s.crossOrigin='anonymous';s.src=${JSON.stringify(bundleSrc)};function go(){document.head.appendChild(s);}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',go);}else{requestAnimationFrame(go);}})();</script>`;
+
+    // Deferred loader: page is fully prerendered, defer hydration until
+    // first interaction or idle (8s max) so the LCP/FCP pipeline doesn't
+    // contend with bundle parse. Falls back to immediate hydration if
+    // the SSR'd path doesn't match the live URL (Vercel SPA rewrite).
+    const deferredLoader = `<script>(function(){var loaded=false;function go(){if(loaded)return;loaded=true;["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.removeEventListener(ev,go,true);});var s=document.createElement('script');s.type='module';s.crossOrigin='anonymous';s.src=${JSON.stringify(bundleSrc)};document.head.appendChild(s);}function load(){var root=document.getElementById('root');var ssrPath=root&&root.getAttribute('data-ssr-path');if(ssrPath&&ssrPath!==location.pathname){if(root)root.innerHTML='';go();return;}["pointerdown","keydown","touchstart","scroll","wheel","click"].forEach(function(ev){window.addEventListener(ev,go,{passive:true,capture:true,once:true});});if('requestIdleCallback' in window){requestIdleCallback(go,{timeout:8000});}else{setTimeout(go,4000);}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',load);}else{load();}})();</script>`;
+
+    const loader = isShellOnly ? eagerLoader : deferredLoader;
+    out = out.replace("</head>", `    ${loader}\n  </head>`);
   }
 
   let target;
@@ -385,7 +415,7 @@ for (const url of routes) {
     mkdirSync(dirname(target), { recursive: true });
   }
   writeFileSync(target, out);
-  console.log(`prerendered ${url} -> ${target} (${out.length} bytes, lifted ${winners.size} head tags, appended ${appended.length})`);
+  console.log(`prerendered ${url} -> ${target} (${out.length} bytes, lifted ${winners.size} head tags, appended ${appended.length}, ${isShellOnly ? "eager" : "deferred"} hydration)`);
 }
 
 // Vercel rewrite still serves /index.html for any non-prerendered route.
