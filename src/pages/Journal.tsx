@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import SmartImage from "../components/SmartImage";
 import { journalPosts, previousCurations } from "../data/journal";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 import { ArrowRight } from "../components/Arrow";
 
 export default function Journal() {
@@ -41,7 +42,15 @@ export default function Journal() {
         <Link to={`/journal/${featured.slug}`} className="block group">
           <div className="grid md:grid-cols-12 gap-10 items-center">
             <div className="md:col-span-8 relative">
-              <SmartImage src={featured.cover} alt={featured.title} aspect="aspect-[5/4]" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
+              <SmartImage
+                src={unsplashSized(featured.cover, 1000)}
+                srcSet={unsplashSrcSet(featured.cover, [500, 800, 1000, 1400])}
+                sizes="(max-width: 768px) 90vw, 60vw"
+                alt={featured.title}
+                aspect="aspect-[5/4]"
+                rounded="rounded-md"
+                className="group-hover:scale-105 transition-transform duration-700"
+              />
               <div className="md:absolute md:bottom-12 md:right-[-15%] mt-4 md:mt-0 bg-app p-6 md:p-8 max-w-md shadow-xl border border-line">
                 <p className="label-muted">{featured.category}</p>
                 <h3 className="mt-3 font-serif italic text-xl md:text-2xl text-fg leading-tight group-hover:text-accent transition-colors">
@@ -66,7 +75,15 @@ export default function Journal() {
           {others.map((p, i) => (
             <Link key={p.slug} to={`/journal/${p.slug}`} className={`group ${i === 1 ? "md:mt-24" : ""}`}>
               <article>
-                <SmartImage src={p.cover} alt={p.title} aspect="aspect-[4/3]" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
+                <SmartImage
+                  src={unsplashSized(p.cover, 800)}
+                  srcSet={unsplashSrcSet(p.cover, [400, 600, 800, 1000])}
+                  sizes="(max-width: 768px) 90vw, 45vw"
+                  alt={p.title}
+                  aspect="aspect-[4/3]"
+                  rounded="rounded-md"
+                  className="group-hover:scale-105 transition-transform duration-700"
+                />
                 <div className="mt-5 flex items-center justify-between">
                   <p className="label-muted">{p.category}</p>
                   <p className="label-muted">{p.date}</p>
@@ -99,7 +116,15 @@ export default function Journal() {
               <span className="mt-6 inline-block btn-outline">Read deep dive</span>
             </div>
             <div className="md:col-span-5">
-              <SmartImage src={futureTrend.cover} alt={futureTrend.title} aspect="aspect-square" rounded="rounded-md" className="group-hover:scale-105 transition-transform duration-700" />
+              <SmartImage
+                src={unsplashSized(futureTrend.cover, 800)}
+                srcSet={unsplashSrcSet(futureTrend.cover, [400, 600, 800, 1000])}
+                sizes="(max-width: 768px) 90vw, 45vw"
+                alt={futureTrend.title}
+                aspect="aspect-square"
+                rounded="rounded-md"
+                className="group-hover:scale-105 transition-transform duration-700"
+              />
             </div>
           </div>
         </Link>

@@ -4,6 +4,7 @@ import Seo from "../components/Seo";
 import Reveal from "../components/Reveal";
 import { projects } from "../data/projects";
 import { githubRepos, topLanguages } from "../data/githubRepos";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 
 const LANG_TINT: Record<string, string> = {
   TypeScript: "#3178c6",
@@ -184,7 +185,9 @@ export default function Projects() {
                 >
                   <div className="aspect-[4/5] overflow-hidden bg-app-elev">
                     <img
-                      src={p.cover}
+                      src={unsplashSized(p.cover, 800)}
+                      srcSet={unsplashSrcSet(p.cover, [400, 600, 800, 1200])}
+                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                       alt={p.title}
                       loading="lazy"
                       decoding="async"

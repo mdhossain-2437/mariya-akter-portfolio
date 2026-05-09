@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 import SmartImage from "../components/SmartImage";
 import { journalEntries } from "../data/journalEntries";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 import { ArrowRight } from "../components/Arrow";
 
 export default function JournalEntry() {
@@ -63,7 +64,14 @@ export default function JournalEntry() {
       </header>
 
       <div className="container-wide">
-        <SmartImage src={entry.hero} alt={entry.title} aspect="aspect-[16/9]" rounded="rounded-md" />
+        <SmartImage
+          src={unsplashSized(entry.hero, 1400)}
+          srcSet={unsplashSrcSet(entry.hero, [600, 900, 1200, 1600])}
+          sizes="(max-width: 1280px) 95vw, 1280px"
+          alt={entry.title}
+          aspect="aspect-[16/9]"
+          rounded="rounded-md"
+        />
       </div>
 
       <section className="container-narrow py-16 md:py-24">

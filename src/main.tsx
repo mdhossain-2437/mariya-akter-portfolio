@@ -23,6 +23,10 @@ const tree = (
 // e.g. an /about component tree against home-page DOM. For mismatching
 // paths we throw away the prerendered markup and start a fresh SPA render.
 const ssrPath = container.dataset.ssrPath;
+// Shell-only pages prerendered just the App layout (header/footer) without
+// the lazy page content. They get eager hydration so visitors don't sit on
+// a blank-ish page and the footer doesn't shift when content fills in.
+const isShellPage = container.dataset.ssrShell === "1";
 const canHydrate =
   container.hasChildNodes() && ssrPath !== undefined && ssrPath === window.location.pathname;
 
@@ -31,6 +35,12 @@ if (!canHydrate) {
   // URL. Wipe whatever is in the root and boot a fresh client render.
   container.innerHTML = "";
   createRoot(container).render(tree);
+} else if (isShellPage) {
+  // Shell pages: hydrate immediately so the lazy page chunk loads and the
+  // actual content fills the viewport-tall placeholder. We don't wait for
+  // user interaction here — visitors expect to see content, not a blank
+  // shell, on lazy-loaded routes.
+  hydrateRoot(container, tree);
 } else {
   // Static HTML is fully painted. Wait for the first user signal — pointer,
   // keyboard, scroll, or visibility change — before hydrating, so the LCP

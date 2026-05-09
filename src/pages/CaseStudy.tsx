@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { projects } from "../data/projects";
 import Seo from "../components/Seo";
+import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 
 export default function CaseStudy() {
   const { slug } = useParams();
@@ -75,7 +76,9 @@ export default function CaseStudy() {
         <div className="container-narrow">
           <div className="aspect-[16/9] overflow-hidden">
             <img
-              src={project.cover}
+              src={unsplashSized(project.cover, 1400)}
+              srcSet={unsplashSrcSet(project.cover, [600, 900, 1200, 1600])}
+              sizes="(max-width: 1280px) 95vw, 1280px"
               alt={project.title}
               fetchPriority="high"
               decoding="async"

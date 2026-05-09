@@ -80,7 +80,14 @@ function AppRoutes() {
       <Header />
       <main id="main" className="relative">
         <PageTransition key={location.pathname}>
-          <Suspense fallback={<div className="min-h-[60vh]" aria-hidden="true" />}>
+          {/* Reserve full viewport height for the lazy page so the Footer
+              that follows is initially below-the-fold. Without this, the
+              footer renders right under the header in the prerendered
+              shell (top:~600px, in viewport), then shifts down to
+              top:~19000px once the page chunk hydrates — a ~0.24 CLS
+              hit on /projects/etc. With the reservation, the footer
+              starts off-screen so the shift doesn't count toward CLS. */}
+          <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
             <Routes location={location}>
                 <Route path="/" element={<Home />} />
                 <Route path="/work" element={<Work />} />

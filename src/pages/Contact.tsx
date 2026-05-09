@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Seo from "../components/Seo";
 import { ArrowRight } from "../components/Arrow";
@@ -35,6 +35,14 @@ export default function Contact() {
   const [fallback, setFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  // Anti-spam: capture the moment the form mounted. Submissions faster
+  // than ~1.5s on the server are treated as bots. Honeypot field below
+  // catches the rest — humans never see it.
+  const openedAt = useRef<number>(0);
+  useEffect(() => {
+    openedAt.current = Date.now();
+  }, []);
+  const [hp, setHp] = useState("");
 
   const summary = useMemo(() => {
     return {
@@ -95,6 +103,8 @@ export default function Contact() {
           timeline,
           budget: budget.trim(),
           narrative: narrative.trim(),
+          _hp: hp,
+          _t: openedAt.current,
         }),
       });
       if (!res.ok) {
@@ -268,6 +278,21 @@ export default function Contact() {
 
                   {!sent && !fallback && step === 4 && (
                     <motion.div key="step4" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
+                      {/* Honeypot — visually hidden, not announced to AT, never
+                          tab-reachable. Bots fill every input they see; the
+                          server discards any submission with this populated. */}
+                      <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+                        <label htmlFor="contact-website">Website (leave empty)</label>
+                        <input
+                          id="contact-website"
+                          name="website"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={hp}
+                          onChange={(e) => setHp(e.target.value)}
+                        />
+                      </div>
                       <p className="label-muted">04 · You</p>
                       <h2 className="font-serif text-3xl mt-3">Who is sending this?</h2>
                       <div className="mt-6 grid sm:grid-cols-2 gap-6">
