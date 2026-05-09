@@ -189,7 +189,12 @@ export default function Projects() {
                       srcSet={unsplashSrcSet(p.cover, [400, 600, 800, 1200])}
                       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                       alt={p.title}
-                      loading="lazy"
+                      // First card is the LCP candidate on /projects.
+                      // Eager + fetchpriority=high so it starts downloading
+                      // as soon as the browser sees the markup. Subsequent
+                      // cards stay lazy to keep initial bandwidth lean.
+                      loading={i === 0 ? "eager" : "lazy"}
+                      fetchPriority={i === 0 ? "high" : "auto"}
                       decoding="async"
                       width="800"
                       height="1000"
