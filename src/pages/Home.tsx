@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight } from "../components/Arrow";
 import Marquee from "../components/Marquee";
 import Magnetic from "../components/Magnetic";
 import Reveal from "../components/Reveal";
+import CountUp from "../components/CountUp";
 import Seo from "../components/Seo";
 import { projects } from "../data/projects";
 import { clients, testimonials } from "../data/clients";
@@ -16,10 +17,10 @@ import { unsplashSized, unsplashSrcSet } from "../lib/unsplash";
 const TAGS = ["Graphics Design", "Digital Marketing", "Fashion Designer", "Creative Direction"];
 
 const STATS = [
-  { value: "12+", label: "Years of Practice" },
-  { value: "60+", label: "Brands Shipped" },
-  { value: "9", label: "International Awards" },
-  { value: "32", label: "Countries Reached" },
+  { value: 12, suffix: "+", label: "Years of Practice" },
+  { value: 60, suffix: "+", label: "Brands Shipped" },
+  { value: 9, suffix: "", label: "International Awards" },
+  { value: 32, suffix: "", label: "Countries Reached" },
 ];
 
 function HeroCanvas() {
@@ -181,7 +182,9 @@ function StatsRow() {
         {STATS.map((s, i) => (
           <Reveal key={s.label} delay={0.05 * i}>
             <div className="border-t border-line pt-6">
-              <div className="font-serif text-5xl md:text-6xl">{s.value}</div>
+              <div className="font-serif text-5xl md:text-6xl tabular-nums">
+                <CountUp to={s.value} suffix={s.suffix} duration={1600} />
+              </div>
               <div className="label-muted mt-3">{s.label}</div>
             </div>
           </Reveal>
